@@ -6,6 +6,7 @@ A web dashboard for the **Yukio** Discord bot. Sign in with Discord, pick a serv
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Deploy-Vercel-000?logo=vercel&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ## Features
 
@@ -109,4 +110,4 @@ Issues and pull requests are welcome. Run `npm run build` before opening a PR so
 
 ## License
 
-No license has been chosen yet. Add a `LICENSE` file to state the terms.
+Released under the [MIT License](LICENSE). Copyright (c) 2026 𝗥 𝗘 𝗗 𝟭.
