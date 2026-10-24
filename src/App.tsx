@@ -78,7 +78,11 @@ function Dashboard({ guilds, owner }: { guilds: any[]; owner: boolean }) {
              aria-current={view == k ? 'page' : undefined} onClick={() => go(k)}
              onKeyDown={e => (e.key == 'Enter' || e.key == ' ') && (e.preventDefault(), go(k))}>{VIEWS[k][0]}</a>
         ))}
-        <a href="/logout" style={{ marginTop: 'auto' }}>Log out</a>
+        <a href="/logout" style={{ marginTop: 'auto' }} onClick={async e => {
+          e.preventDefault()
+          try { await fetch('/logout', { redirect: 'manual', credentials: 'same-origin' }) } catch {}
+          location.replace('/')
+        }}>Log out</a>
       </nav>
       <main>
         <header>
