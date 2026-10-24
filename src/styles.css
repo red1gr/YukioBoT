@@ -156,6 +156,7 @@ header{position:static;flex-direction:column;align-items:stretch}header select{w
 .grid{grid-template-columns:repeat(2,1fr)}
 .row>.n{min-width:100%}.row>button,.row>select,.row>input{flex:1 1 130px}
 .row>input[type=checkbox]{flex:none;width:42px}
+.row:has(>input[type=checkbox])>.n{min-width:0}
 .bar{max-width:calc(100% - 140px)}
 #toasts{left:12px;right:12px;bottom:12px}.toast{max-width:none}
 }
