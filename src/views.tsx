@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { api, fmt, dur, toast } from './api'
+import { DesignField, isDesign } from './Designer'
 
 type P = { G: string; owner: boolean }
 const Empty = ({ children }: { children: ReactNode }) => <span className="empty">{children}</span>
@@ -120,7 +121,17 @@ function Members({ G }: { G: string }) {
   </>
 }
 
-
+function Warnings({ G }: { G: string }) {
+  const [w, setW] = useState<any[]>()
+  return <>
+    <h3>Warnings</h3><div className="row"><button onClick={async () => setW(await api(`/guilds/${G}/warnings`))}>Load warnings</button></div>
+    {w?.map(x => <div className="row" key={x.id}>
+      <span className="n"><b>#{x.id}</b> <Id v={x.user_id} /> {x.reason}<br /><span className="dim">{x.mod} · {fmt(x.ts)}</span></span>
+      <button className="d" onClick={async () => { await api(`/guilds/${G}/warnings/${x.id}`, null, 'DELETE'); setW(w.filter(y => y.id != x.id)) }}>Delete</button>
+    </div>)}
+    {w && !w.length && <Empty>No warnings.</Empty>}
+  </>
+}
 
 function Bans({ G }: { G: string }) {
   const [b, setB] = useState<any[]>()
@@ -178,7 +189,7 @@ export function Server({ G, owner }: P) {
         <input placeholder="Message" style={{ flex: 1 }} value={dm} onChange={e => setDm(e.target.value)} />
         <button className="p" onClick={async () => { await api(`/guilds/${G}/dm`, { user_id: du, content: dm }); setDm(''); toast('Sent') }}>Send DM</button></div></>}
 
-    <Members G={G} /><Bans G={G} />
+    <Members G={G} /><Warnings G={G} /><Bans G={G} />
   </>
 }
 
@@ -201,6 +212,11 @@ function CogCard({ c, G, owner, info, refresh }: any) {
   const lists: any = { channel: info.channels || [], role: info.roles || [], voice: info.voice_channels || [] }
   const pre: any = { channel: '#', role: '@', voice: '🔊 ' }
   const set = (k: string, v: any) => setVals((x: any) => ({ ...x, [k]: v }))
+  const saveDesign = async (k: string, json: string) => {
+    const next = { ...vals, [k]: json }
+    await api(`/cogs/${c.name}/settings/${G}`, next)
+    setVals(next); toast('Design saved')
+  }
   const life = async (a: string) => {
     if (a == 'unload' && !confirm(`Unload ${c.name}?`)) return
     try { await api(`/cogs/${c.name}/${a}`, {}); toast(`${c.name}: ${a}ed`) } finally { refresh() }
@@ -217,7 +233,8 @@ function CogCard({ c, G, owner, info, refresh }: any) {
         {c.settings.map((s: any) => {
           const v = vals[s.key]
           return <div className="row" key={s.key}><span className="n">{s.label}</span>
-            {lists[s.type] ? <select value={v ?? ''} onChange={e => set(s.key, e.target.value)}>
+            {isDesign(s) ? <DesignField value={v ?? ''} onSave={j => saveDesign(s.key, j)} />
+              : lists[s.type] ? <select value={v ?? ''} onChange={e => set(s.key, e.target.value)}>
                 <option value="">- none -</option><Opt list={lists[s.type]} pre={pre[s.type]} /></select>
               : s.type == 'bool' ? <input type="checkbox" checked={!!v} onChange={e => set(s.key, e.target.checked)} />
               : <input value={v ?? ''} onChange={e => set(s.key, s.type == 'number' ? Number(e.target.value) : e.target.value)} />}
