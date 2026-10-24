@@ -36,7 +36,7 @@ export function Overview({ G, owner }: P) {
   if (!o) return <Skeleton />
   const days: Record<string, number> = {}; (st || []).forEach(x => (days[x.day] = (days[x.day] || 0) + x.count))
   const mx = Math.max(1, ...Object.values(days))
-  const cards = [['Bot', o.bot], ['Ping', o.latency_ms + ' ms'], ['Uptime', dur(o.uptime)], ['Servers', o.guilds], ['Members', o.members], ['Cogs', o.cogs], ['Commands', o.commands]]
+  const cards = [['Bot', o.bot], ['Ping', o.latency_ms + ' ms'], ['Uptime', dur(o.uptime)], ['Servers', o.guilds], ['Members', o.members], ['Commands', o.commands]]
   return <>
     <div className="grid">{cards.map(([a, b]) => <div className="card" key={a}><small>{a}</small><b>{String(b)}</b></div>)}</div>
     <div className="cols" style={owner ? undefined : { gridTemplateColumns: '1fr' }}>
@@ -218,7 +218,7 @@ function CogCard({ c, G, owner, info, refresh }: any) {
   return (
     <div className="card" style={{ marginBottom: 14 }}>
       <div className="row" style={{ border: 0, padding: 0 }}>
-        <span className="n"><b style={{ textTransform: 'uppercase' }}>{c.name}</b> <span className={c.loaded ? 'on' : 'off'}>{c.loaded ? 'loaded' : 'unloaded'}</span></span>
+        <span className="n"><b style={{ textTransform: 'uppercase' }}>{c.name}</b>{owner && <> <span className={c.loaded ? 'on' : 'off'}>{c.loaded ? 'loaded' : 'unloaded'}</span></>}</span>
         {owner && (c.loaded ? <><button onClick={() => life('reload')}>Reload</button><button className="d" onClick={() => life('unload')}>Unload</button></>
           : <button className="p" onClick={() => life('load')}>Load</button>)}
       </div>
