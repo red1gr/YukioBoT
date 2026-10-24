@@ -249,7 +249,7 @@ export function Settings({ G, owner }: P) {
   const [cs, refresh] = useLoad(() => api<any[]>('/cogs'), [])
   const [info] = useLoad(() => (G ? api('/guilds/' + G) : Promise.resolve({})), [G])
   if (!cs || !info) return <Skeleton />
-  return <>{cs.map(c => <CogCard key={c.name} c={c} G={G} owner={owner} info={info} refresh={refresh} />)}</>
+  return <>{cs.filter(c => owner || c.settings.length > 0).map(c => <CogCard key={c.name} c={c} G={G} owner={owner} info={info} refresh={refresh} />)}</>
 }
 
 /* ---------- Commands ---------- */

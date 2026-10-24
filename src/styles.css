@@ -155,6 +155,7 @@ nav a.on::after{display:none}nav a:hover:not(.on){transform:none}
 header{position:static;flex-direction:column;align-items:stretch}header select{width:100%}
 .grid{grid-template-columns:repeat(2,1fr)}
 .row>.n{min-width:100%}.row>button,.row>select,.row>input{flex:1 1 130px}
+.row>input[type=checkbox]{flex:none;width:42px}
 .bar{max-width:calc(100% - 140px)}
 #toasts{left:12px;right:12px;bottom:12px}.toast{max-width:none}
 }
