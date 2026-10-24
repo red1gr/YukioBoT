@@ -3,7 +3,7 @@ import { api, onToast } from './api'
 import { Overview, Logs, Server, Leaderboard, Settings, Commands } from './views'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
-const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/94fe9fcb2077b19271f794ed0bb9f43b.webp'
+const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
 
 const VIEWS = {
   overview: ['Overview', Overview], logs: ['Live logs', Logs], server: ['Server', Server],
@@ -22,18 +22,31 @@ function Landing() {
     load(); const t = setInterval(load, 30000); return () => clearInterval(t)
   }, [])
   const s = pub.status || 'offline'
+  const label = ({ online: 'Online & ready', idle: 'Taking a nap', dnd: 'Busy right now', offline: 'Sleeping…' } as any)[s] || 'Sleeping…'
+  const hello = s == 'offline' ? 'zzz... wake me up soon~' : 'Hi hi! I\'m Yukio~'
+  const chips = ['Moderation', 'Live logs', 'Leveling', 'Tickets', 'Anti-nuke', 'Fun commands']
   return (
-    <div id="landing"><section className="hero">
-      <div className="av"><img src={pub.avatar || AVATAR} alt="Bot avatar" />
-        <span className="dot" data-s={s} role="img" aria-label={'Status: ' + s} /></div>
-      <h1>Yukio</h1>
-      <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
-      <div className="actions">
-        <a className="btn p" href="/login">Login with Discord</a>
-        <a className="btn" target="_blank" rel="noopener"
-           href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
+    <div id="landing">
+      <div className="spk" aria-hidden="true">
+        {Array.from({ length: 8 }, (_, i) => <span key={i} style={{ ['--i' as any]: i }} />)}
       </div>
-    </section></div>
+      <section className="hero">
+        <div className="bubble" role="status">{hello}</div>
+        <div className="av"><i className="ring" aria-hidden="true" />
+          <img src={pub.avatar || AVATAR} alt="Bot avatar" />
+          <span className="dot" data-s={s} role="img" aria-label={'Status: ' + s} /></div>
+        <h1>Yukio<span className="tag">BOT</span></h1>
+        <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
+        <p className="pill" data-s={s}><i />{label}</p>
+        <p className="blurb">Your cute little Discord helper that keeps your server safe, tidy and fun.</p>
+        <div className="chips">{chips.map(c => <span key={c}>{c}</span>)}</div>
+        <div className="actions">
+          <a className="btn p" href="/login">Login with Discord</a>
+          <a className="btn" target="_blank" rel="noopener"
+             href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
+        </div>
+      </section>
+    </div>
   )
 }
 
