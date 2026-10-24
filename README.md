@@ -14,7 +14,7 @@ A web dashboard for the **Yukio** Discord bot. Sign in with Discord, pick a serv
 - **Discord OAuth2 login**, with the session handled by the bot backend
 - **Overview**: ping, uptime, servers, members, cogs, commands, 7-day activity chart and latest events
 - **Live logs**: auto-refreshing feed with search, type filter, CSV export and pruning
-- **Server tools**: log channel mapping, send messages and embeds, purge, DM, member search with warn / timeout / nickname / kick / ban, warnings and bans lists
+- **Server tools**: log channel mapping, send messages and embeds, purge, DM, member search with warn / timeout / nickname / kick and bans lists
 - **Leaderboard**: XP, level and message counts per server
 - **Settings**: load, unload and reload cogs, and edit each cog's per-server settings and actions
 - **Commands**: browsable list of the bot's slash commands
@@ -99,7 +99,7 @@ The dashboard expects these endpoints. All except `/api/public` require a logged
 | POST | `/api/presence` | Set bot presence (owner) |
 | POST | `/api/guilds/:id/{send,embed,dm,purge,logchannel}` | Messaging and channel actions |
 | GET / POST | `/api/guilds/:id/members` and `/members/:uid/{warn,timeout,nick,kick,ban,unban}` | Member search and moderation |
-| GET / DELETE | `/api/guilds/:id/{warnings,bans}` | Warnings and bans |
+| GET / DELETE | `/api/guilds/:id/bans` | bans |
 | GET | `/api/guilds/:id/leaderboard` | XP leaderboard |
 | GET / POST | `/api/cogs`, `/api/cogs/:name/{load,unload,reload}` | Cog management |
 | GET / POST | `/api/cogs/:name/settings/:guild`, `/api/cogs/:name/action/:guild` | Per-server cog settings and actions |

@@ -120,17 +120,7 @@ function Members({ G }: { G: string }) {
   </>
 }
 
-function Warnings({ G }: { G: string }) {
-  const [w, setW] = useState<any[]>()
-  return <>
-    <h3>Warnings</h3><div className="row"><button onClick={async () => setW(await api(`/guilds/${G}/warnings`))}>Load warnings</button></div>
-    {w?.map(x => <div className="row" key={x.id}>
-      <span className="n"><b>#{x.id}</b> <Id v={x.user_id} /> {x.reason}<br /><span className="dim">{x.mod} · {fmt(x.ts)}</span></span>
-      <button className="d" onClick={async () => { await api(`/guilds/${G}/warnings/${x.id}`, null, 'DELETE'); setW(w.filter(y => y.id != x.id)) }}>Delete</button>
-    </div>)}
-    {w && !w.length && <Empty>No warnings.</Empty>}
-  </>
-}
+
 
 function Bans({ G }: { G: string }) {
   const [b, setB] = useState<any[]>()
@@ -188,7 +178,7 @@ export function Server({ G, owner }: P) {
         <input placeholder="Message" style={{ flex: 1 }} value={dm} onChange={e => setDm(e.target.value)} />
         <button className="p" onClick={async () => { await api(`/guilds/${G}/dm`, { user_id: du, content: dm }); setDm(''); toast('Sent') }}>Send DM</button></div></>}
 
-    <Members G={G} /><Warnings G={G} /><Bans G={G} />
+    <Members G={G} /><Bans G={G} />
   </>
 }
 
