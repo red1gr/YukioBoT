@@ -1,0 +1,29 @@
+/* Security tab — built on the dashboard's own styles (cards, switches, buttons). */
+.sec{max-width:900px}
+.sec h4{margin:0;font-size:16px;font-weight:800}
+.sec p{margin:2px 0 0}
+.sec .inl{display:inline;font-size:inherit;color:var(--hi);text-transform:uppercase}
+.sc-status{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.sc-status.live{box-shadow:0 12px 40px rgba(52,216,166,.18)}
+.sc-presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.sc-preset{display:flex;flex-direction:column;align-items:flex-start;gap:6px;white-space:normal;text-align:left;border-radius:var(--r);padding:16px;border:2px solid var(--c);background:rgba(12,20,36,.8);opacity:.8}
+.sc-preset strong{font-size:18px;color:var(--c)}
+.sc-preset span{color:var(--dim);font-size:13px;line-height:1.4;font-weight:500}
+.sc-preset:hover,.sc-preset.active{opacity:1;background:rgba(17,26,46,.95)}
+.sc-preset.active{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+.sc-list{display:flex;flex-direction:column;gap:14px}
+.sc-card{margin-bottom:0}
+.sc-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.sc-head input[type=checkbox]{flex:none}
+.sc-row{border-bottom:1px solid var(--line)}
+.sc-row:last-child{border-bottom:0}
+.sc-row select,.sc-row input:not([type=checkbox]){width:min(260px,100%)}
+.sc-row small{font-weight:500}
+.sc-note{font-size:12.5px;margin-top:8px!important}
+.sc-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin:12px 0}
+.sc-chips label{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);cursor:pointer;font-weight:600;color:var(--dim)}
+.sc-chips label.on{border-color:var(--hi);color:var(--ink);background:rgba(138,212,255,.08)}
+.sc-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sec details{margin-top:12px}
+.sec .card .card{box-shadow:none}
+@media(max-width:600px){.sc-row select,.sc-row input:not([type=checkbox]){width:100%}}

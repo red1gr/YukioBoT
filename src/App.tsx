@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react'
 import { api, onToast } from './api'
 import { Overview, Logs, Server, Leaderboard, Settings, Commands } from './views'
+import SecurityTab from './SecurityTab'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
 const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
 
+const Security = ({ G }: { G: string; owner: boolean }) =>
+  G ? <SecurityTab guildId={G} /> : <span className="empty">No server selected.</span>
+
 const VIEWS = {
   overview: ['Overview', Overview], logs: ['Live logs', Logs], server: ['Server', Server],
+  security: ['Security', Security],
   leaderboard: ['Leaderboard', Leaderboard], cogs: ['Settings', Settings], commands: ['Commands', Commands],
 } as const
 type ViewKey = keyof typeof VIEWS
