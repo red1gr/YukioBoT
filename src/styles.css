@@ -193,3 +193,20 @@ header{position:static;flex-direction:column;align-items:stretch}header select{w
 .dz-side{border-left:0;border-top:1px solid var(--line)}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* tickets tab */
+nav a[data-v=tickets]{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'><path d='M3 8V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a2 2 0 0 0 0 4v0a2 2 0 0 0 0 4v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2a2 2 0 0 0 0-4v0a2 2 0 0 0 0-4z'/><path d='M14 6v12' stroke-dasharray='2 3'/></svg>")}
+.tk-tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.tk-tabs .sp{flex:1}
+.tk-ta{flex:2 1 320px;min-height:84px;resize:vertical}
+.tk-col{width:52px;padding:2px;height:40px;cursor:pointer}
+.tk-chips{display:flex;gap:6px;flex-wrap:wrap;flex:2 1 260px;align-items:center}
+.tk-chips button{padding:3px 12px;min-height:0;border-radius:99px;font-size:12.5px}
+.tk-type{margin-bottom:12px}
+.tk-emb{max-width:480px;padding:12px 14px;border-radius:8px;border-left:4px solid #0f00ff;background:#111a2e;overflow-wrap:anywhere}
+.tk-emb b{display:block;margin-bottom:4px}
+.tk-emb p{margin:0;white-space:pre-wrap;color:#c6dcf0}
+.tk-emb .th{float:right;width:56px;height:56px;object-fit:cover;border-radius:8px;margin:0 0 8px 12px}
+.tk-emb .im{display:block;max-width:100%;border-radius:6px;margin-top:10px}
+.tk-emb small{display:block;margin-top:10px;color:var(--dim);font-size:11.5px}
+@media(max-width:900px){.tk-tabs .sp{display:none}}
