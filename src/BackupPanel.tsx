@@ -7,7 +7,8 @@
 //   POST   /api/guilds/:id/backups            -> await cog.api_create(g, body.note)
 //   POST   /api/guilds/:id/backups/:bid/restore -> await cog.api_restore(g, bid)
 //   DELETE /api/guilds/:id/backups/:bid       -> cog.api_delete(g, bid)
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { toast } from './api'
 
 type Summary = { id: string; created?: string; note?: string; roles: number; channels: number; categories?: number; emojis: number; size?: number }
@@ -62,6 +63,27 @@ const ago = (d: Date | null) => {
   return `${Math.round(m / 1440)} days ago`
 }
 const TYPE_TAG: Record<string, string> = { text: '#', news: 'news', voice: 'voice', stage: 'stage', forum: 'forum' }
+
+/* Popup window: closes with the Close button, the Escape key or a click outside */
+function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const o = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    addEventListener('keydown', k)
+    return () => { removeEventListener('keydown', k); document.body.style.overflow = o }
+  }, [onClose])
+  return createPortal(
+    <div className="sc-modal" role="dialog" aria-modal="true" aria-label={title} onMouseDown={e => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="sc-dialog sec">
+        <div className="sc-dialog-top">
+          <div><h4>{title}</h4><p className="dim">This is what Restore can re-create.</p></div>
+          <button className="p" onClick={onClose}>Close</button>
+        </div>
+        <div className="sc-dialog-body">{children}</div>
+      </div>
+    </div>, document.body)
+}
 
 export default function BackupPanel({ guildId, v, save, reload }: Props) {
   const base = `/api/guilds/${guildId}/backups`
@@ -206,10 +228,7 @@ export default function BackupPanel({ guildId, v, save, reload }: Props) {
         <p className="dim sc-note">The contents view (roles, channels and emojis inside each backup) needs the optional backup routes on the dashboard backend. Backups, restore and delete work without them.</p>
       )}
 
-      {open && <>
-        <h3>Inside backup {open.id}</h3>
-        <div className="card sc-card">
-          <div className="sc-head"><div><h4>Contents</h4><p className="dim">This is what Restore can re-create.</p></div><button onClick={() => setOpen(null)}>Close</button></div>
+      {open && <Modal title={`Inside backup ${open.id}`} onClose={() => setOpen(null)}>
           <div className="sc-inside">
             <div>
               <h5>Roles ({open.roles.length})</h5>
@@ -234,8 +253,7 @@ export default function BackupPanel({ guildId, v, save, reload }: Props) {
               <div className="sc-tags">{open.emojis.map((e, i) => <span key={i}>{e.name}</span>)}{!open.emojis.length && <span>none</span>}</div>
             </div>
           </div>
-        </div>
-      </>}
+      </Modal>}
 
       <h3>Automatic backups</h3>
       <div className="card sc-card">
