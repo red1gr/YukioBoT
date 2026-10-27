@@ -1,22 +1,50 @@
-/* Security tab — built on the dashboard's own styles (cards, switches, buttons). */
+/* Security page — built on the dashboard's own styles (cards, switches, buttons). */
 .sec{max-width:1100px;margin:0 auto;padding-bottom:24px}
 .sec h3{margin:34px 0 14px}
-.sec h4{margin:0;font-size:17px;font-weight:800;letter-spacing:-.2px}
+.sec h4{margin:0;font-size:17px;font-weight:800;letter-spacing:-.2px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sec h5{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--hi)}
 .sec p{margin:3px 0 0;line-height:1.5}
 .sec .card{padding:20px 24px}
+.sec .mono{font-size:12.5px}
+.sc-lead{margin:-4px 0 16px!important}
 
 /* status */
 .sc-status{display:flex;align-items:center;justify-content:space-between;gap:20px}
 .sc-status.live{box-shadow:0 12px 40px rgba(52,216,166,.16)}
-.sc-mode{display:inline-flex;align-items:center;gap:8px;margin-top:10px!important;padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;color:var(--dim);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.sc-mode{display:inline-flex;align-items:center;gap:8px;margin-top:12px!important;padding:4px 14px;border-radius:99px;font-size:13px;font-weight:700;color:var(--dim);border:1px solid var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .sc-mode::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
-.sc-mode b{color:var(--c);text-transform:uppercase;letter-spacing:.5px}
+.sc-mode span{color:var(--c);text-transform:uppercase;letter-spacing:.5px}
+
+/* tabs */
+.sc-tabs{display:flex;gap:4px;margin:24px 0 0;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(5,10,20,.5);width:fit-content;max-width:100%;overflow-x:auto}
+.sc-tabs button{border:0;background:transparent;min-height:38px;padding:7px 22px;color:var(--dim)}
+.sc-tabs button:hover{background:rgba(120,200,255,.1);color:var(--ink);transform:none}
+.sc-tabs button.act{background:var(--grad);color:#031322;box-shadow:0 8px 24px rgba(56,160,255,.35)}
+
+/* pills */
+.sc-pill{display:inline-flex;align-items:center;padding:2px 11px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;border:1px solid transparent}
+.sc-pill.ok{color:var(--ok);background:rgba(52,216,166,.12);border-color:rgba(52,216,166,.3)}
+.sc-pill.todo{color:var(--warn);background:rgba(255,198,92,.12);border-color:rgba(255,198,92,.3)}
+.sc-pill.off{color:var(--dim);background:rgba(138,160,192,.1);border-color:rgba(138,160,192,.25)}
+.sc-pill.opt{color:var(--hi);background:rgba(138,212,255,.1);border-color:rgba(138,212,255,.25);text-transform:none;letter-spacing:0}
+
+/* setup checklist */
+.sc-prog{height:8px;margin:16px 0 6px;border-radius:99px;background:#172640;overflow:hidden}
+.sc-prog i{display:block;height:100%;width:var(--w);border-radius:99px;background:var(--grad);transition:width .4s var(--ease)}
+.sc-steps{display:flex;flex-direction:column}
+.sc-step{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.sc-step:last-child{border-bottom:0;padding-bottom:0}
+.sc-step .sc-pill{flex:none;min-width:78px;justify-content:center}
+.sc-step>div{flex:1;min-width:0}
+.sc-step strong{display:block}
+.sc-step small{margin:0}
 
 /* presets */
 .sc-presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.sc-preset{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;white-space:normal;text-align:left;border-radius:var(--r);padding:20px 20px 22px;border:2px solid color-mix(in srgb,var(--c) 40%,transparent);background:rgba(12,20,36,.7);opacity:.75;min-height:130px}
+.sc-preset{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;white-space:normal;text-align:left;border-radius:var(--r);padding:20px 20px 22px;border:2px solid color-mix(in srgb,var(--c) 40%,transparent);background:rgba(12,20,36,.7);opacity:.75;min-height:140px}
 .sc-preset strong{font-size:20px;color:var(--c)}
-.sc-preset span{color:var(--dim);font-size:13.5px;line-height:1.45;font-weight:500}
+.sc-preset span{color:var(--dim);font-size:13.5px;line-height:1.45;font-weight:500;margin-top:2px}
+.sc-rec{margin:0!important;font-size:11.5px!important;font-weight:700;color:var(--c)!important;text-transform:uppercase;letter-spacing:.4px}
 .sc-preset:hover:not(:disabled){opacity:1;border-color:var(--c);transform:translateY(-2px)}
 .sc-preset.active{opacity:1;border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,#0c1424);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 28%,transparent),0 14px 40px color-mix(in srgb,var(--c) 22%,transparent)}
 .sc-preset.busy{opacity:1;border-color:var(--c);animation:scpulse 1s ease-in-out infinite}
@@ -30,29 +58,50 @@
 .sc-head{display:flex;justify-content:space-between;align-items:center;gap:20px}
 .sc-head>div{min-width:0}
 .sc-head input[type=checkbox]{flex:none}
-.sc-row{padding:12px 0;border-radius:0;border-bottom:1px solid var(--line);gap:16px}
+.sc-row{padding:14px 0;border-radius:0;border-bottom:1px solid var(--line);gap:16px}
 .sc-row:hover{background:none}
-.sc-row:last-child{border-bottom:0}
-.sc-row>.n{min-width:0;flex:1 1 220px;font-weight:600}
+.sc-row:first-child{padding-top:0}
+.sc-row:last-child{border-bottom:0;padding-bottom:0}
+.sc-row>.n{min-width:0;flex:1 1 240px;font-weight:600}
 .sc-row select,.sc-row input:not([type=checkbox]){flex:0 0 min(300px,100%);width:min(300px,100%)}
-.sc-row small{display:block;font-weight:500;font-size:12.5px}
-.sc-note{font-size:12.5px;margin-top:10px!important}
-.sec details{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2)}
-.sec details>.sc-row:first-of-type{margin-top:6px}
+.sc-row small{display:block;margin:2px 0 0;font-weight:500;font-size:12.5px}
+.sc-note{font-size:12.5px;margin-top:12px!important}
+.sec details{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line2)}
+.sec details>.sc-row:first-of-type{margin-top:8px}
 .sec details>div{padding-left:0}
 .sec summary{display:inline-flex;align-items:center;user-select:none}
 .sec .card .card{box-shadow:none}
 
 /* chips / buttons */
-.sc-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin:16px 0 4px}
+.sc-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:16px 0 4px}
 .sc-chips label{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:14px;border:1px solid var(--line);cursor:pointer;font-weight:600;color:var(--dim);transition:border-color .15s,background .15s}
 .sc-chips label:hover{border-color:var(--line2)}
 .sc-chips label.on{border-color:var(--hi);color:var(--ink);background:rgba(138,212,255,.08)}
 .sc-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.sc-btns.sc-inline{margin-top:0;justify-content:flex-end}
+
+/* backups */
+.sc-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.sc-stats>div{padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(5,10,20,.4)}
+.sc-stats strong{display:block;font-size:16px;margin:4px 0 2px;overflow-wrap:anywhere}
+.sc-stats small{margin:0}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sc-tags span{padding:3px 12px;border-radius:99px;font-size:12.5px;font-weight:600;color:var(--ink);background:rgba(120,200,255,.08);border:1px solid rgba(120,200,255,.18)}
+.sc-inside{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:20px}
+.sc-inside .sc-tags{margin-top:0}
+.sc-tree{margin-bottom:14px}
+.sc-tree strong{display:block;margin-bottom:4px;color:var(--hi);font-size:13px}
+.sc-tree>div{padding:2px 0 2px 14px;border-left:1px solid var(--line2);font-size:13.5px}
+.sc-tree em{display:inline-block;min-width:34px;font-style:normal;font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase}
 
 @media(max-width:820px){
   .sec .card{padding:16px}
   .sc-row select,.sc-row input:not([type=checkbox]){flex:1 1 100%;width:100%}
   .sc-row>.n{flex-basis:100%}
-  .sc-status{align-items:flex-start}
+  .sc-status,.sc-head{align-items:flex-start}
+  .sc-head{flex-wrap:wrap}
+  .sc-btns.sc-inline{justify-content:flex-start}
+  .sc-step{flex-wrap:wrap}
+  .sc-tabs{width:100%}
+  .sc-tabs button{padding:7px 14px;flex:1}
 }
