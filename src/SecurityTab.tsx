@@ -236,9 +236,9 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
         <input type="checkbox" aria-label="Protection master switch" checked={on('enabled')} onChange={e => save({ enabled: e.target.checked })} />
       </div>
 
-      <nav className="sc-tabs" aria-label="Security sections">
-        {TABS.map(([k, name]) => <button key={k} className={tab === k ? 'act' : ''} aria-current={tab === k ? 'page' : undefined} onClick={() => go(k)}>{name}</button>)}
-      </nav>
+      <div className="sc-tabs" role="tablist" aria-label="Security sections">
+        {TABS.map(([k, name]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'act' : ''} onClick={() => go(k)}>{name}</button>)}
+      </div>
 
       {/* ================= SETUP ================= */}
       {tab === 'setup' && <>
