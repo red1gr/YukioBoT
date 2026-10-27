@@ -4,7 +4,7 @@
 //   GET  /api/cogs                          (to read the security cog's setting definitions)
 //   GET  /api/cogs/security/settings/:guild (current values, {key: value})
 //   POST /api/cogs/security/settings/:guild (body = {key: value, ...}, only the changed keys)
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { api, toast } from './api'
 import BackupPanel from './BackupPanel'
 import './security.css'
@@ -31,6 +31,9 @@ const parseLabel = (l: string) => {
   return m ? { n: +m[1], name: m[3] } : { n: 99, name: l }
 }
 const isButton = (k: string) => k.startsWith('act_') || k.startsWith('preset_') || k === 'mod_run'
+const READ_ONLY = ['preset_current', 'backup_view']
+// settings that only make sense on the server they were exported from (IDs)
+const SERVER_BOUND = (d: Def) => d.type === 'channel' || d.key.startsWith('wl_') || ['unverified_role', 'verified_role', 'mod_target', 'backup_id'].includes(d.key)
 
 /* ---------- small inputs (module scope so they keep focus) ---------- */
 function Field({ s, C }: { s: Def; C: Ctx }) {
@@ -78,10 +81,15 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
   const [defList, setDefList] = useState<Def[]>()
   const [chans, setChans] = useState<{ id: string; name: string }[]>([])
   const [missing, setMissing] = useState(false)
+  const [applying, setApplying] = useState<string | null>(null)
+  const poll = useRef<number>()
+  const file = useRef<HTMLInputElement>(null)
 
   const reload = useCallback(() => {
     api<any>(`/cogs/security/settings/${guildId}`).then(setV).catch(() => {})
   }, [guildId])
+
+  useEffect(() => () => window.clearInterval(poll.current), [])
 
   useEffect(() => {
     api<any[]>('/cogs').then(cs => {
@@ -120,7 +128,65 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
     window.setTimeout(reload, 12000)
   }
 
+  // Apply a preset: the bot picks the switch up within ~10 s, so we poll and refresh every setting on the page until it is done
+  const applyPreset = (p: typeof PRESETS[number]) => {
+    if (!confirm(`Apply the ${p.title.toUpperCase()} preset? It overwrites limits, punishments and guard switches. Your trusted list and log channel are kept.`)) return
+    window.clearInterval(poll.current)
+    setApplying(p.id)
+    save({ [`preset_${p.id}`]: true })
+    let tries = 0
+    poll.current = window.setInterval(async () => {
+      tries++
+      try {
+        const nv = await api<any>(`/cogs/security/settings/${guildId}`)
+        if (String(nv.preset_current).toLowerCase() === p.id && !truthy(nv[`preset_${p.id}`])) {
+          window.clearInterval(poll.current); setV(nv); setApplying(null)
+          toast(`${p.title} preset applied. All settings below were updated`)
+          return
+        }
+      } catch { /* keep trying */ }
+      if (tries >= 20) {
+        window.clearInterval(poll.current); setApplying(null); reload()
+        toast('The bot has not answered yet. Check that it is online, then refresh')
+      }
+    }, 2000)
+  }
+
+  const exportSettings = () => {
+    const settings: Record<string, any> = {}
+    for (const s of defList) if (!isButton(s.key) && !READ_ONLY.includes(s.key)) settings[s.key] = v[s.key] ?? s.default
+    const data = { app: 'yukio-security', version: 1, guild: guildId, preset: val('preset_current') ?? 'none', exported: new Date().toISOString(), settings }
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }))
+    a.download = `yukio-security-${guildId}.json`
+    a.click(); URL.revokeObjectURL(a.href)
+    toast('Settings exported')
+  }
+
+  const importSettings = async (f?: File) => {
+    if (!f) return
+    try {
+      const data = JSON.parse(await f.text())
+      if (data?.app !== 'yukio-security' || typeof data.settings !== 'object') throw 0
+      const same = String(data.guild) === guildId
+      const patch: Record<string, any> = {}
+      let skipped = 0
+      for (const [k, raw] of Object.entries<any>(data.settings)) {
+        const d = defs[k]
+        if (!d || isButton(k) || READ_ONLY.includes(k) || (!same && SERVER_BOUND(d))) { skipped++; continue }
+        patch[k] = d.type === 'bool' ? truthy(raw) : d.type === 'number' ? Number(raw) : String(raw ?? '')
+      }
+      const n = Object.keys(patch).length
+      if (!n) return toast('Nothing to import')
+      if (!confirm(`Import ${n} settings${same ? '' : ' from another server'}?${skipped ? ` (${skipped} skipped${same ? '' : ': channels, role IDs and trusted lists are server specific'})` : ''} Current values will be overwritten.`)) return
+      await save(patch)
+      toast(`Imported ${n} settings`)
+    } catch { toast('Import failed: not a valid Yukio security file') }
+    finally { if (file.current) file.current.value = '' }
+  }
+
   const preset = String(val('preset_current') ?? 'none')
+  const active = PRESETS.find(p => p.id === preset.toLowerCase())
   const nukeOn = ACTION_KEYS.some(k => on(k + '_on'))
   const isNukeKey = (k: string) => ACTION_KEYS.some(a => k === a + '_on' || k === a + '_punish')
   const isGuardKey = (k: string) => Object.keys(GUARDS).some(g => k === g + '_on')
@@ -131,20 +197,28 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
       <div className={'card sc-status' + (on('enabled') ? ' live' : '')}>
         <div>
           <h4>{on('enabled') ? 'Protection is ON' : 'Protection is OFF'}</h4>
-          <p className="dim">Current preset: <b className="inl">{preset}</b>. The master switch turns every protection below on or off.</p>
+          <p className="dim">The master switch turns every protection below on or off.</p>
+          <p className="sc-mode" style={{ ['--c' as any]: active?.color ?? 'var(--dim)' }}>
+            Mode: <b>{applying ? 'applying…' : active ? active.title : 'Custom / none'}</b>
+          </p>
         </div>
         <input type="checkbox" aria-label="Protection master switch" checked={on('enabled')} onChange={e => save({ enabled: e.target.checked })} />
       </div>
 
       <h3>1. Pick a level</h3>
       <div className="sc-presets">
-        {PRESETS.map(p => (
-          <button key={p.id} className={'sc-preset' + (preset.toLowerCase() === p.id ? ' active' : '')} style={{ ['--c' as any]: p.color }}
-            onClick={() => run(`preset_${p.id}`, `Apply the ${p.title.toUpperCase()} preset? It overwrites limits, punishments and guard switches. Your trusted list and log channel are kept`)}>
-            <strong>{p.title}</strong><span>{p.text}</span>
-          </button>
-        ))}
+        {PRESETS.map(p => {
+          const isOn = active?.id === p.id, busy = applying === p.id
+          return (
+            <button key={p.id} disabled={!!applying} className={'sc-preset' + (isOn ? ' active' : '') + (busy ? ' busy' : '')}
+              style={{ ['--c' as any]: p.color }} aria-pressed={isOn} onClick={() => applyPreset(p)}>
+              {(isOn || busy) && <em className="sc-badge">{busy ? 'Applying…' : '✓ Active'}</em>}
+              <strong>{p.title}</strong><span>{p.text}</span>
+            </button>
+          )
+        })}
       </div>
+      {!active && !applying && <p className="dim sc-note">No preset is active. You are using custom settings. Pick a level to reset everything to a ready-made setup.</p>}
 
       {/* 2. essentials */}
       <h3>2. Essentials</h3>
@@ -229,6 +303,17 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
         <Row s={def('backup_keep', 'number')} C={C} label="Keep the newest" hint="backups" />
         <details><summary>More options</summary>
           {rest(2, k => ['backup_auto_hours', 'backup_keep'].includes(k)).map(s => <Row key={s.key} s={s} C={C} />)}</details>
+      </div>
+
+      {/* import / export */}
+      <h3>Import / export</h3>
+      <div className="card sc-card">
+        <p className="dim">Save all security settings to a file, or load a file to restore them (or copy them to another server).</p>
+        <div className="sc-btns">
+          <button className="p" onClick={exportSettings}>Export settings</button>
+          <button onClick={() => file.current?.click()}>Import settings</button>
+          <input ref={file} type="file" accept="application/json,.json" hidden onChange={e => importSettings(e.target.files?.[0])} />
+        </div>
       </div>
 
       {/* advanced */}
