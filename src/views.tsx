@@ -224,7 +224,7 @@ function CogCard({ c, G, owner, info, refresh }: any) {
   return (
     <div className="card" style={{ marginBottom: 14 }}>
       <div className="row" style={{ border: 0, padding: 0 }}>
-        <span className="n"><b style={{ textTransform: 'uppercase' }}>{c.name}</b>{owner && <> <span className={c.loaded ? 'on' : 'off'}>{c.loaded ? 'loaded' : 'unloaded'}</span></>}</span>
+        <span className="n"><b style={{ textTransform: 'uppercase' }}>{String(c.name).replace(/_/g, ' ')}</b>{owner && <> <span className={c.loaded ? 'on' : 'off'}>{c.loaded ? 'loaded' : 'unloaded'}</span></>}</span>
         {owner && (c.loaded ? <><button onClick={() => life('reload')}>Reload</button><button className="d" onClick={() => life('unload')}>Unload</button></>
           : <button className="p" onClick={() => life('load')}>Load</button>)}
       </div>
