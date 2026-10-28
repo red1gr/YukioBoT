@@ -21,7 +21,7 @@ const GUARDS: Record<string, string> = {
 }
 const PRESETS = [
   { id: 'low', title: 'Low', color: '#34d8a6', text: 'Relaxed. Removes roles instead of banning. Only blocks @everyone.', rec: false },
-  { id: 'normal', title: 'Normal', color: '#38b6ff', text: 'Anti-nuke, raid and spam protection, key guards and a daily backup.', rec: true },
+  { id: 'normal', title: 'Normal', color: '#38b6ff', text: 'Anti-nuke, raid, spam and scam protection, invite blocker, key guards and a daily backup.', rec: true },
   { id: 'high', title: 'High', color: '#ff627a', text: 'Strict. Everything on, bans offenders, raid lock, backup every 6 hours.', rec: false },
 ]
 const TABS = [['setup', 'Setup'], ['protect', 'Protections'], ['backup', 'Backups'], ['tools', 'Tools']] as const
@@ -310,7 +310,25 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
           </Card>
 
           <Card C={C} title="Anti-Spam" desc="Stops message floods, repeated messages and mention spam."
-            on={on('spam_on')} onToggle={b => save({ spam_on: b })} more={rest(9, k => k === 'spam_on')} />
+            on={on('spam_on')} onToggle={b => save({ spam_on: b })} more={rest(9, k => k === 'spam_on' || k === 'filter_test_mode')}>
+            <Row s={def('filter_test_mode', 'bool')} C={C} label="Test mode"
+              hint="Nobody is exempt, not even you. Turn it on to test spam, link and scam protection, then turn it off." />
+          </Card>
+
+          <Card C={C} title="Link blocker" desc="Deletes Discord invites to other servers and, if you choose, every link."
+            on={on('link_on')} onToggle={b => save({ link_on: b })}
+            more={rest(10, k => k.startsWith('scam_') || ['link_on', 'link_block_invites', 'link_block_all', 'link_allowed_domains'].includes(k))}>
+            <Row s={def('link_block_invites', 'bool')} C={C} label="Block invites to other servers" hint="Invites to this server stay allowed." />
+            <Row s={def('link_block_all', 'bool')} C={C} label="Block all links" hint="Except the allowed domains below, allowed channels and allowed roles." />
+            <Row s={def('link_allowed_domains')} C={C} label="Allowed domains" hint="Comma separated, for example tenor.com,giphy.com" />
+          </Card>
+
+          <Card C={C} title="Scam blocker" desc="Catches fake Nitro and Steam links, look-alike domains, crypto scams and hacked accounts spamming many channels."
+            on={on('scam_on')} onToggle={b => save({ scam_on: b })}
+            more={rest(10, k => k.startsWith('link_') || ['scam_on', 'scam_actions', 'scam_threshold'].includes(k))}>
+            <Row s={def('scam_actions')} C={C} label="What to do" hint="Any of: delete, mute, strip, kick, ban (comma separated)." />
+            <Row s={def('scam_threshold', 'number')} C={C} label="Strictness" hint="Score that triggers a block. Lower is stricter. 50 is the default." />
+          </Card>
 
           <Card C={C} title="Guards" desc="Blocks and reverts sensitive changes. Tick what you want to protect."
             more={rest(8, k => isGuardKey(k))}>
@@ -333,10 +351,10 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
           </Card>
 
           <Card C={C} title="Auto recovery" desc="Re-creates channels, roles and emojis that an offender deletes."
-            on={on('recover_on')} onToggle={b => save({ recover_on: b })} more={rest(11, k => k === 'recover_on')} />
+            on={on('recover_on')} onToggle={b => save({ recover_on: b })} more={rest(12, k => k === 'recover_on')} />
 
           <Card C={C} title="Verification" desc="New members must verify with a button or a captcha before they get access."
-            on={on('verify_on')} onToggle={b => save({ verify_on: b })} more={rest(10, k => ['verify_on', 'verify_mode', 'verify_channel'].includes(k))}>
+            on={on('verify_on')} onToggle={b => save({ verify_on: b })} more={rest(11, k => ['verify_on', 'verify_mode', 'verify_channel'].includes(k))}>
             <div className="row sc-row"><span className="n">Method<small className="dim">Button is easy. Captcha blocks most bots.</small></span>
               <select value={String(val('verify_mode') ?? 'button')} onChange={e => save({ verify_mode: e.target.value })}>
                 <option value="button">Button</option><option value="captcha">Captcha</option></select></div>
@@ -372,8 +390,8 @@ export default function SecurityTab({ guildId }: { guildId: string }) {
         </div>
 
         <h3>Advanced</h3>
-        <div className="card sc-card"><details open={false}><summary>Logging, owner alerts and per-action allow lists ({rest(12).length})</summary>
-          {rest(12).map(s => <Row key={s.key} s={s} C={C} />)}</details></div>
+        <div className="card sc-card"><details open={false}><summary>Logging, owner alerts and per-action allow lists ({rest(13).length})</summary>
+          {rest(13).map(s => <Row key={s.key} s={s} C={C} />)}</details></div>
       </>}
     </div>
   )
