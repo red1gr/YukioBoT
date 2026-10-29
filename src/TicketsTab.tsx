@@ -12,6 +12,7 @@ const DEF: Record<string, any> = {
   types_json: '', ticket_types: 'Support,Purchase,Bug report',
   panel_title: 'RD TICKETS', panel_text: 'Select a ticket type below to open a ticket.', panel_image: '', panel_thumbnail: '', panel_footer: '',
   panel_style: 'dropdown', button_style: 'blurple', select_placeholder: 'Select a ticket type...', replace_panel: true, embed_color: '0f00ff', v2_panel: false, v2_ticket: false, v2_close: false,
+  v2_box: true, v2_image: true, v2_thumbnail: true, v2_separator: true, v2_footer: true,
   welcome_title: '{type} TICKET', welcome_text: 'Hello {user}, please describe your {type} request. Staff will reply shortly.',
   welcome_image: '', welcome_thumbnail: '', footer_text: '',
   close_text: 'Thank you for contacting us! Open a new ticket if you need more help.', rating_text: 'How was your support?',
@@ -237,13 +238,22 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
           {T('panel_image', 'Image URL')}
           {T('panel_thumbnail', 'Thumbnail URL')}
           {T('panel_footer', 'Footer')}
-          {Col('embed_color', 'Embed colour (all ticket embeds)')}
+          {Col('embed_color', 'Embed colour (classic embeds only, not used by Components V2)')}
           {S('panel_style', 'Style', [['dropdown', 'Dropdown'], ['buttons', 'Buttons']])}
           {v('panel_style') == 'buttons'
             ? S('button_style', 'Button colour', [['blurple', 'Blurple'], ['green', 'Green'], ['red', 'Red'], ['grey', 'Grey']])
             : T('select_placeholder', 'Dropdown placeholder')}
           {B('replace_panel', 'Delete the old panel when posting a new one')}
           {B('v2_panel', 'Use Components V2 for the panel', 'Container layout with the dropdown or buttons inside it. Falls back to an embed if Discord rejects it.')}
+          {!!(v('v2_panel') || v('v2_ticket') || v('v2_close')) && <>
+            <h3>Components V2 layout</h3>
+            <p className="dim">No colour bar. Pick which parts to show (applies to every V2 message).</p>
+            {B('v2_box', 'Container box')}
+            {B('v2_image', 'Image')}
+            {B('v2_thumbnail', 'Thumbnail')}
+            {B('v2_separator', 'Divider line before the buttons')}
+            {B('v2_footer', 'Footer')}
+          </>}
         </div>
         <div><h3>Preview</h3>
           <Embed c={v('embed_color')} title={v('panel_title')} text={v('panel_text')} image={v('panel_image')} thumb={v('panel_thumbnail')} footer={v('panel_footer')} />
