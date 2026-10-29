@@ -6,7 +6,7 @@
 .nv-fb{display:grid;place-items:center;font-weight:800;font-size:15px;color:#031322;background:var(--grad)}
 .nv-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.2}
 .nv-tx b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700;color:var(--ink)}
-.nv-tx small{font-size:11.5px;font-weight:600;color:#f1c064}
+.nv-tx small{font-size:11.5px;font-weight:600;color:#031322}
 .nv-tx small.adm{color:#f1c064;font-weight:800}
 #app nav a.nv-out{flex:none;margin:0;padding:9px;border-radius:12px;gap:0;color:var(--dim)}
 #app nav a.nv-out:hover:not(.on){transform:none;color:var(--bad);background:rgba(255,98,122,.12)}
