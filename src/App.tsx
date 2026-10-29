@@ -59,9 +59,9 @@ function Landing() {
           <h1>Yukio<span className="tag">BOT</span></h1>
           <OwnerCard />
           <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
-          <p className="pill" data-s={s}><i />{label}</p>
+          {/* <p className="pill" data-s={s}><i />{label}</p> */}
           {s != 'offline' && <div className="stats">
-            {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}
+            {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}{stat(pub.channels, 'channels')}
           </div>}
           <div className="actions">
             <a className="btn p" href="/login">Login with Discord</a>
