@@ -49,7 +49,7 @@ export default function OwnerCard() {
   const name = d.discord_user.global_name || d.discord_user.username
   const line = doing(d)
   return (
-    <a className="own" data-s={s} href={`https://discord.com/users/${OWNER_ID}`} target="_blank" rel="noopener"
+    <a className="own" data-s={s}  rel="noopener"
        title="Open on Discord">
       <span className="own-av">
         <img src={avatarOf(d.discord_user)} alt="" />
@@ -57,7 +57,7 @@ export default function OwnerCard() {
       </span>
       <span className="own-tx">
         <small>DEVELOPED BY </small>
-        <b>{name}</b>
+        <b>R E D 1</b>
         <em>{line || LABEL[s]}</em>
       </span>
     </a>
