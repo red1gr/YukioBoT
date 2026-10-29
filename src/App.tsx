@@ -71,7 +71,7 @@ function UserCard({ me, onLogout }: { me: any; onLogout: (e: React.MouseEvent) =
       </span>
       <span className="nv-tx">
         <b title={me.name}>{me.name}</b>
-        <small className={me.role == 'Bot owner' ? 'own' : me.owner ? 'adm' : ''}>{me.role || (me.owner ? 'Bot admin' : 'Server admin')}</small>
+        <small className={me.owner ? 'adm' : ''}>{me.owner ? 'Bot Owner' : 'Server admin'}</small>
       </span>
       <a href="/logout" className="nv-out" title="Log out" aria-label="Log out" onClick={onLogout} />
     </div>
