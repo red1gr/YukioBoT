@@ -4,6 +4,7 @@ import { Overview, Logs, Server, Leaderboard, Settings, Commands } from './views
 import SecurityTab from './SecurityTab'
 import TicketsTab from './TicketsTab'
 import Legal, { LegalFooter, legalPage } from './Legal'
+import GuildPicker from './GuildPicker'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
 const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
@@ -95,11 +96,9 @@ function Dashboard({ guilds, owner }: { guilds: any[]; owner: boolean }) {
       <main>
         <header>
           <h2>{VIEWS[view][0]}</h2>
-          <select aria-label="Server" value={G} onChange={e => {
-            setG(e.target.value); try { localStorage.setItem('yukio.guild', e.target.value) } catch {}
-          }}>
-            {guilds.map(g => <option key={g.id} value={g.id}>{g.name} ({g.members})</option>)}
-          </select>
+          <GuildPicker guilds={guilds} value={G} onChange={id => {
+            setG(id); try { localStorage.setItem('yukio.guild', id) } catch {}
+          }} />
         </header>
         <div id="v"><View key={view + G} G={G} owner={owner} /></div>
       </main>
