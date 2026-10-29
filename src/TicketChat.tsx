@@ -14,21 +14,31 @@ const time = (t: number) => new Date(t * 1000).toLocaleTimeString([], { hour: '2
 const day = (t: number) => new Date(t * 1000).toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })
 const merge = (old: Msg[], add: Msg[]) => { const seen = new Set(old.map(m => m.id)); return [...old, ...add.filter(m => !seen.has(m.id))] }
 
-function Linkify({ text }: { text: string }) {
-  return <>{text.split(/(https?:\/\/[^\s<>]+)/g).map((p, i) =>
-    i % 2 ? <a key={i} href={p} target="_blank" rel="noopener noreferrer">{p}</a> : p)}</>
+/* tiny Discord-style markdown: **bold** *italic* __underline__ ~~strike~~ `code` ```block``` and links */
+const MD = /(```[\s\S]*?```|`[^`\n]+`|\*\*[\s\S]+?\*\*|__[\s\S]+?__|~~[\s\S]+?~~|\*[^*\n]+\*|https?:\/\/[^\s<>]+)/g
+function Md({ text }: { text: string }) {
+  return <>{text.split(MD).map((p, i) => {
+    if (i % 2 == 0) return p
+    if (p.startsWith('```')) return <pre key={i} className="tc-pre">{p.slice(3, -3).replace(/^\w*\n/, '')}</pre>
+    if (p.startsWith('`')) return <code key={i} className="tc-code">{p.slice(1, -1)}</code>
+    if (p.startsWith('**')) return <strong key={i}><Md text={p.slice(2, -2)} /></strong>
+    if (p.startsWith('__')) return <u key={i}><Md text={p.slice(2, -2)} /></u>
+    if (p.startsWith('~~')) return <s key={i}><Md text={p.slice(2, -2)} /></s>
+    if (p.startsWith('*')) return <em key={i}><Md text={p.slice(1, -1)} /></em>
+    return <a key={i} href={p} target="_blank" rel="noopener noreferrer">{p}</a>
+  })}</>
 }
 
 function Embed({ e }: { e: Emb }) {
   const c = e.color ? '#' + e.color.toString(16).padStart(6, '0') : 'var(--line2)'
   return (
-    <div className="tc-emb" style={{ borderLeftColor: c }}>
+    <div className={"tc-emb" + (e.thumbnail ? " th" : "")} style={{ borderLeftColor: c }}>
       {e.thumbnail && <img className="tc-emb-th" src={e.thumbnail} alt="" />}
       {e.author && <small>{e.author}</small>}
-      {e.title && <b>{e.title}</b>}
-      {e.description && <p><Linkify text={e.description} /></p>}
+      {e.title && <b><Md text={e.title} /></b>}
+      {e.description && <p><Md text={e.description} /></p>}
       {e.fields.length > 0 && <div className="tc-fields">{e.fields.map((f, i) =>
-        <div key={i} style={f.inline ? undefined : { gridColumn: '1/-1' }}><strong>{f.name}</strong><span>{f.value}</span></div>)}</div>}
+        <div key={i} style={f.inline ? undefined : { gridColumn: '1/-1' }}><strong>{f.name}</strong><span><Md text={f.value} /></span></div>)}</div>}
       {e.image && <img className="tc-emb-im" src={e.image} alt="" />}
       {e.footer && <small>{e.footer}</small>}
     </div>
@@ -110,15 +120,19 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
   return (
     <div className="tc-modal" onMouseDown={e => { if (e.target === e.currentTarget) onClose() }}>
       <div className="tc" role="dialog" aria-label={`Ticket #${ticket.name}`}>
-        <header className="tc-top">
+        <div className="tc-top">
+          <span className="tc-hash" aria-hidden="true">#</span>
           <div className="tc-title">
-            <b>#{meta?.name ?? ticket.name}</b>
-            <small>{meta?.kind ?? ticket.kind}{ticket.owner_name ? ` · ${ticket.owner_name}` : ''}</small>
+            <b>{meta?.name ?? ticket.name}</b>
+            <span className="tc-chips">
+              {(meta?.kind ?? ticket.kind) && <i>{meta?.kind ?? ticket.kind}</i>}
+              {ticket.owner_name && <i>{ticket.owner_name}</i>}
+              {closed && <i className="off">closed</i>}
+            </span>
           </div>
-          {closed && <span className="tc-badge off">closed</span>}
           <span className={'tc-live' + (live ? '' : ' bad')}><i />{live ? 'Live' : err ? 'Offline' : 'Loading'}</span>
           <button className="tc-x" onClick={onClose} aria-label="Close chat" />
-        </header>
+        </div>
 
         <div className="tc-body" ref={box} onScroll={onScroll}>
           {!msgs && !err && <p className="tc-note">Loading messages...</p>}
@@ -142,7 +156,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
                           <b style={m.author.color ? { color: m.author.color } : undefined}>{m.author.name}</b>
                           {m.author.bot && <em>BOT</em>}<small>{time(m.ts)}</small>
                         </div>}
-                        {m.content && <p><Linkify text={m.content} />{m.edited && <small className="tc-ed"> (edited)</small>}</p>}
+                        {m.content && <p><Md text={m.content} />{m.edited && <small className="tc-ed"> (edited)</small>}</p>}
                         {m.embeds.map((e, j) => <Embed key={j} e={e} />)}
                         {m.attachments.map((a, j) => /^image\//.test(a.type)
                           ? <a key={j} href={a.url} target="_blank" rel="noopener noreferrer"><img className="tc-img" src={a.url} alt={a.name} loading="lazy" /></a>
@@ -156,7 +170,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
         {away > 0 && <button className="tc-away" onClick={down}>{away} new message{away == 1 ? '' : 's'}</button>}
         {err && msgs && <div className="tc-err">{err}</div>}
 
-        <footer className="tc-foot">
+        <div className="tc-foot">
           <textarea ref={ta} value={text} maxLength={2000} rows={1} placeholder={`Reply in #${meta?.name ?? ticket.name} as the bot...`}
             onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key == 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send() } }} />
@@ -165,7 +179,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
             <label><input type="checkbox" checked={sign} onChange={e => toggleSign(e.target.checked)} /> Sign with my name</label>
             <span>Enter to send · Shift+Enter for a new line · {text.length}/2000</span>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
   )
