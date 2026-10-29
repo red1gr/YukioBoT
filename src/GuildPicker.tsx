@@ -20,7 +20,6 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
   const root = useRef<HTMLDivElement>(null)
-  const scroller = useRef<HTMLDivElement>(null)
   const search = guilds.length > 6
   const cur = guilds.find(g => g.id == value) ?? guilds[0]
 
@@ -37,7 +36,7 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
   }, [open])
 
   useEffect(() => {
-    if (open) scroller.current?.querySelector<HTMLElement>(`[data-i="${hi}"]`)?.scrollIntoView({ block: 'nearest' })
+    if (open) root.current?.querySelector<HTMLElement>(`[data-i="${hi}"]`)?.scrollIntoView({ block: 'nearest' })
   }, [open, hi])
 
   if (!cur) return null
@@ -81,7 +80,7 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
             <input className="gp-search" type="text" placeholder="Search servers…" value={q} autoFocus
               aria-label="Search servers" onChange={e => { setQ(e.target.value); setHi(0) }} />
           )}
-          <div className="gp-scroll" role="listbox" aria-label="Servers" ref={scroller}>
+          <div className="gp-scroll" role="listbox" aria-label="Servers">
             {shown.map((g, i) => (
               <div key={g.id} data-i={i} role="option" aria-selected={g.id == value}
                 className={'gp-opt' + (g.id == value ? ' sel' : '') + (i == hi ? ' hi' : '')}
@@ -96,7 +95,7 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
           <a className={'gp-add' + (hi == ADD ? ' hi' : '')} data-i={ADD} href={INVITE_URL} target="_blank" rel="noopener"
             onMouseEnter={() => setHi(ADD)} onClick={close}>
             <span className="gp-plus" aria-hidden="true" />
-            <span className="gp-tx"><b>Add a server</b><small>Invite Yukio to another server</small></span>
+            <span className="gp-tx"><b>Add a server</b><small>Invite Yukio to more servers</small></span>
             <i className="gp-ext" aria-hidden="true" />
           </a>
         </div>
