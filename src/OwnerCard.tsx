@@ -24,7 +24,7 @@ const doing = (d: LY): string => {
   return ''
 }
 
-const LABEL = { online: 'Online', idle: 'Away', dnd: 'Busy', offline: 'Offline' }
+const LABEL = { online: 'Online & Accessible', idle: 'Pas Accessible', dnd: 'Pas Accessible', offline: 'Pas Accessible' }
 
 export default function OwnerCard() {
   const [d, setD] = useState<LY | null>(null)
