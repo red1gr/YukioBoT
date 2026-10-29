@@ -6,12 +6,12 @@ type TType = { label: string; emoji?: string; description?: string; welcome?: st
 
 const DEF: Record<string, any> = {
   enabled: false, category_name: 'TICKETS', archive_category: '', channel_name: '{type}-{user}',
-  claim_enabled: true, claim_label: 'CLAIM', close_label: 'CLOSE', confirm_close: false, ask_reason: false, allow_user_close: true,
+  claim_enabled: true, claim_label: 'CLAIM', close_label: 'CLOSE', confirm_close: false, ask_reason: false, allow_user_close: true, ticket_commands: true, delete_empty_category: false,
   staff_role: '', extra_staff_roles: '', ping_staff: true, required_role: '', blacklist_role: '',
   max_open: 1, cooldown_seconds: 0, min_account_days: 0, min_member_days: 0,
   types_json: '', ticket_types: 'Support,Purchase,Bug report',
   panel_title: 'RD TICKETS', panel_text: 'Select a ticket type below to open a ticket.', panel_image: '', panel_thumbnail: '', panel_footer: '',
-  panel_style: 'dropdown', button_style: 'blurple', select_placeholder: 'Select a ticket type...', replace_panel: true, embed_color: '0f00ff',
+  panel_style: 'dropdown', button_style: 'blurple', select_placeholder: 'Select a ticket type...', replace_panel: true, embed_color: '0f00ff', v2_panel: false, v2_ticket: false, v2_close: false,
   welcome_title: '{type} TICKET', welcome_text: 'Hello {user}, please describe your {type} request. Staff will reply shortly.',
   welcome_image: '', welcome_thumbnail: '', footer_text: '',
   close_text: 'Thank you for contacting us! Open a new ticket if you need more help.', rating_text: 'How was your support?',
@@ -210,6 +210,7 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
       <h3>Channels</h3>
       {T('category_name', 'Ticket category', 'Created automatically. Blank = no category.')}
       {T('channel_name', 'Channel name pattern', '{type} {user} {number} {id}')}
+      {B('delete_empty_category', 'Delete the ticket category when it has 0 tickets', 'Only categories used by tickets, and only once they have no channels left. It is recreated when the next ticket opens.')}
       <h3>Buttons inside tickets</h3>
       {B('claim_enabled', 'Show the claim button', 'Staff can claim a ticket; press again to release it.')}
       {T('claim_label', 'Claim button text')}
@@ -217,6 +218,8 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
       {B('confirm_close', 'Ask for confirmation before closing')}
       {B('ask_reason', 'Ask for a close reason', 'Shows a popup; the reason goes into the log and transcript embed.')}
       {B('allow_user_close', 'Ticket owner can close their own ticket')}
+      <h3>Commands</h3>
+      {B('ticket_commands', 'Enable the /ticket commands', 'add, remove, rename and close. When off they reply that commands are disabled; the Close button still works.')}
     </>}
 
     {tab == 'types' && <>
@@ -240,9 +243,11 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
             ? S('button_style', 'Button colour', [['blurple', 'Blurple'], ['green', 'Green'], ['red', 'Red'], ['grey', 'Grey']])
             : T('select_placeholder', 'Dropdown placeholder')}
           {B('replace_panel', 'Delete the old panel when posting a new one')}
+          {B('v2_panel', 'Use Components V2 for the panel', 'Container layout with the dropdown or buttons inside it. Falls back to an embed if Discord rejects it.')}
         </div>
         <div><h3>Preview</h3>
           <Embed c={v('embed_color')} title={v('panel_title')} text={v('panel_text')} image={v('panel_image')} thumb={v('panel_thumbnail')} footer={v('panel_footer')} />
+          {!!v('v2_panel') && <p className="dim" style={{ marginTop: 10 }}>Components V2: the {v('panel_style') == 'buttons' ? 'buttons' : 'dropdown'} sit inside the box instead of under it.</p>}
           <p className="dim" style={{ marginTop: 10 }}>{list.length} type{list.length == 1 ? '' : 's'}: {list.map(t => `${t.emoji || ''} ${t.label}`.trim()).join(', ') || 'none'}</p>
         </div>
       </div>
@@ -262,9 +267,11 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
         {T('welcome_image', 'Image URL')}
         {T('welcome_thumbnail', 'Thumbnail URL')}
         {T('footer_text', 'Footer')}
+        {B('v2_ticket', 'Use Components V2 in new tickets', 'Claim / Close buttons inside the box. Pings are sent as a line above it.')}
         <h3>Closing</h3>
         {A('close_text', 'Message when a ticket closes', '{user} {type} {reason}')}
         {A('rating_text', 'DM text asking for a rating')}
+        {B('v2_close', 'Use Components V2 for the closed message', 'Reopen / Delete buttons (archive mode) sit inside the box.')}
       </div>
       <div><h3>Preview</h3>
         <Embed c={v('embed_color')} title={v('welcome_title')} text={v('welcome_text')} image={v('welcome_image')} thumb={v('welcome_thumbnail')} footer={v('footer_text')} />
