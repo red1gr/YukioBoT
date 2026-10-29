@@ -86,7 +86,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key == 'Escape') onClose() }
-    addEventListener('keydown', h); ta.current?.focus()
+    addEventListener('keydown', h); ta.current?.focus({ preventScroll: true })
     return () => removeEventListener('keydown', h)
   }, [onClose])
 
@@ -111,7 +111,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
       const r = await api(`/guilds/${G}/tickets/${ticket.id}/send`, { content, sign })
       setText(''); stick.current = true
       setMsgs(o => merge(o ?? [], [r.message]))
-    } catch {} finally { setSending(false); ta.current?.focus() }
+    } catch {} finally { setSending(false); ta.current?.focus({ preventScroll: true }) }
   }
   const toggleSign = (v: boolean) => { setSign(v); try { localStorage.setItem('yukio.tk.sign', v ? '1' : '0') } catch {} }
 

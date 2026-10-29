@@ -101,3 +101,13 @@
 .tc-opts{align-items:center}
 .tc-opts label{color:var(--ink)}
 @media(max-width:820px){.tc-top{padding:12px 14px}.tc-body{padding:8px 14px 14px}.tc-foot{padding:10px 14px 12px}}
+
+/* ---- v3: stop the dialog from ever being scrolled sideways ---- */
+.tc{overflow:hidden;overflow:clip;min-width:0;contain:layout paint}
+.tc,.tc *{min-width:0}
+.tc-top>.tc-hash,.tc-top>.tc-live,.tc-top>.tc-x{flex:none}
+.tc-body{overflow-x:hidden}
+.tc-foot{grid-template-columns:minmax(0,1fr) auto}
+.tc-foot textarea{display:block;width:100%;min-width:0;box-sizing:border-box}
+.tc-foot>button{min-width:92px}
+.tc-x{width:36px;height:36px;min-height:0;min-width:36px}
