@@ -61,7 +61,7 @@ function Landing() {
           <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
           {/* <p className="pill" data-s={s}><i />{label}</p> */}
           {s != 'offline' && <div className="stats">
-            {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}{stat(pub.channels, 'channels')}
+            {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}
           </div>}
           <div className="actions">
             <a className="btn p" href="/login">Login with Discord</a>
