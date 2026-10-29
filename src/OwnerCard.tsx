@@ -56,7 +56,7 @@ export default function OwnerCard() {
         <i className="own-dot" data-s={s} role="img" aria-label={LABEL[s]} />
       </span>
       <span className="own-tx">
-        <small>Developed By</small>
+        <small>DEVELOPED BY </small>
         <b>{name}</b>
         <em>{line || LABEL[s]}</em>
       </span>

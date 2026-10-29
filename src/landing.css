@@ -70,3 +70,13 @@
   #landing .blurb{text-align:center}
 }
 @media(max-width:480px){.feats{grid-template-columns:1fr}}
+
+/* ---- real Discord status icons: online dot, idle crescent, dnd minus, offline ring ---- */
+#landing .dot,#landing .pill i,.own-dot{background-color:transparent!important;background-repeat:no-repeat;background-position:center;background-size:100% 100%;box-shadow:none;animation:none}
+#landing .pill i{width:14px;height:14px}
+#landing .dot[data-s=online],#landing .pill[data-s=online] i,.own-dot[data-s=online]{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><mask id='m'><rect width='24' height='24' fill='white'/></mask><circle cx='12' cy='12' r='12' fill='%2323a55a' mask='url(%23m)'/></svg>")}
+#landing .dot[data-s=idle],#landing .pill[data-s=idle] i,.own-dot[data-s=idle]{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><mask id='m'><rect width='24' height='24' fill='white'/><circle cx='5' cy='5' r='6.5' fill='black'/></mask><circle cx='12' cy='12' r='12' fill='%23f0b232' mask='url(%23m)'/></svg>")}
+#landing .dot[data-s=dnd],#landing .pill[data-s=dnd] i,.own-dot[data-s=dnd]{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><mask id='m'><rect width='24' height='24' fill='white'/><rect x='5.5' y='9.5' width='13' height='5' rx='2.5' fill='black'/></mask><circle cx='12' cy='12' r='12' fill='%23f23f43' mask='url(%23m)'/></svg>")}
+#landing .dot[data-s=offline],#landing .pill[data-s=offline] i,.own-dot[data-s=offline]{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><mask id='m'><rect width='24' height='24' fill='white'/><circle cx='12' cy='12' r='6' fill='black'/></mask><circle cx='12' cy='12' r='12' fill='%2380848e' mask='url(%23m)'/></svg>")}
+#landing .dot:not([data-s=online]):not([data-s=idle]):not([data-s=dnd]),.own-dot:not([data-s=online]):not([data-s=idle]):not([data-s=dnd]){background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><mask id='m'><rect width='24' height='24' fill='white'/><circle cx='12' cy='12' r='6' fill='black'/></mask><circle cx='12' cy='12' r='12' fill='%2380848e' mask='url(%23m)'/></svg>")}
+#landing .pill[data-s=online] i{filter:drop-shadow(0 0 5px rgba(35,165,90,.7))}
