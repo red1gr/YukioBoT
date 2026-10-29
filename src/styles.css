@@ -158,6 +158,7 @@ nav a:not([data-v]){margin:0 0 0 auto!important}
 nav a.on::after{display:none}nav a:hover:not(.on){transform:none}
 header{position:static;flex-direction:column;align-items:stretch}header select{width:100%}
 .grid{grid-template-columns:repeat(2,1fr)}
+.grid .card:last-child{grid-column:span 2}
 .row>.n{min-width:100%}.row>button,.row>select,.row>input{flex:1 1 130px}
 .row>input[type=checkbox]{flex:none;width:42px}
 .row:has(>input[type=checkbox])>.n{min-width:0}
