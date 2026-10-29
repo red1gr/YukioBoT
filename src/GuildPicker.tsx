@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './guildpicker.css'
 
 type G = { id: string; name: string; members: number; icon?: string | null }
@@ -20,6 +21,9 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
   const root = useRef<HTMLDivElement>(null)
+  const btn = useRef<HTMLButtonElement>(null)
+  const list = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState<React.CSSProperties>({})
   const search = guilds.length > 6
   const cur = guilds.find(g => g.id == value) ?? guilds[0]
 
@@ -28,15 +32,34 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
   const ADD = shown.length
   const [hi, setHi] = useState(0)
 
+  // The list is rendered on <body> (portal) so no page element can ever paint over it; we place it under the button.
+  useLayoutEffect(() => {
+    if (!open) return
+    const place = () => {
+      const r = btn.current?.getBoundingClientRect(); if (!r) return
+      const vw = window.innerWidth, vh = window.innerHeight, narrow = vw <= 820
+      const top = r.bottom + 10
+      const width = narrow ? vw - 24 : Math.max(r.width, 330)
+      const left = narrow ? 12 : Math.min(Math.max(12, r.right - width), vw - width - 12)
+      setPos({ top, left, width, maxHeight: Math.max(220, vh - top - 14) })
+    }
+    place()
+    window.addEventListener('resize', place); window.addEventListener('scroll', place, true)
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', place, true) }
+  }, [open])
+
   useEffect(() => {
     if (!open) return
-    const d = (e: MouseEvent) => { if (!root.current?.contains(e.target as Node)) setOpen(false) }
+    const d = (e: MouseEvent) => {
+      const n = e.target as Node
+      if (!root.current?.contains(n) && !list.current?.contains(n)) setOpen(false)
+    }
     document.addEventListener('mousedown', d)
     return () => document.removeEventListener('mousedown', d)
   }, [open])
 
   useEffect(() => {
-    if (open) root.current?.querySelector<HTMLElement>(`[data-i="${hi}"]`)?.scrollIntoView({ block: 'nearest' })
+    if (open) list.current?.querySelector<HTMLElement>(`[data-i="${hi}"]`)?.scrollIntoView({ block: 'nearest' })
   }, [open, hi])
 
   if (!cur) return null
@@ -64,15 +87,16 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
 
   return (
     <div className="gp" ref={root} onKeyDown={key}>
-      <button type="button" className={'gp-btn' + (open ? ' open' : '')} aria-haspopup="listbox" aria-expanded={open}
+      <button type="button" ref={btn} className={'gp-btn' + (open ? ' open' : '')} aria-haspopup="listbox" aria-expanded={open}
         aria-label={`Server: ${cur.name}`} onClick={() => (open ? close() : show())}>
         <Icon g={cur} />
         <span className="gp-tx"><b>{cur.name}</b><small>{count(cur.members)}</small></span>
         <i className="gp-chev" aria-hidden="true" />
       </button>
 
-      {open && (
-        <div className="gp-list">
+      {open && createPortal(<>
+        <div className="gp-back" onMouseDown={close} aria-hidden="true" />
+        <div className="gp-list" ref={list} style={pos}>
           <div className="gp-top">
             <span>Your servers</span><em>{guilds.length}</em>
           </div>
@@ -99,7 +123,7 @@ export default function GuildPicker({ guilds, value, onChange }: { guilds: G[]; 
             <i className="gp-ext" aria-hidden="true" />
           </a>
         </div>
-      )}
+      </>, document.body)}
     </div>
   )
 }
