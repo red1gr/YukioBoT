@@ -1,12 +1,12 @@
 /* one footer card: avatar, name + role, log out icon */
 .nv-user{display:flex;align-items:center;gap:11px;margin:auto 0 0;padding:10px 8px 10px 10px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(rgba(14,24,44,.75),rgba(8,14,28,.75))}
 .nv-av{flex:none;display:block;width:40px;height:40px;border-radius:50%;padding:2px;background:var(--line2)}
-.nv-av.adm{background:#f1c06475;box-shadow:0 0 14px #f1c064}
+.nv-av.adm{background:#f1c06475;box-shadow:0 0 14px #f1c06470}
 .nv-av img,.nv-fb{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #0a101e;background:var(--panel2)}
 .nv-fb{display:grid;place-items:center;font-weight:800;font-size:15px;color:#031322;background:var(--grad)}
 .nv-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.2}
 .nv-tx b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700;color:var(--ink)}
-.nv-tx small{font-size:11.5px;font-weight:600;color:#304253}
+.nv-tx small{font-size:11.5px;font-weight:600;color:#495b6b}
 .nv-tx small.adm{color:#f1c064;font-weight:800}
 #app nav a.nv-out{flex:none;margin:0;padding:9px;border-radius:12px;gap:0;color:var(--dim)}
 #app nav a.nv-out:hover:not(.on){transform:none;color:var(--bad);background:rgba(255,98,122,.12)}
