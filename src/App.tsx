@@ -5,7 +5,9 @@ import SecurityTab from './SecurityTab'
 import TicketsTab from './TicketsTab'
 import Legal, { LegalFooter, legalPage } from './Legal'
 import GuildPicker from './GuildPicker'
+import OwnerCard from './OwnerCard'
 import './usercard.css'
+import './landing.css'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
 const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
@@ -32,10 +34,19 @@ function Landing() {
   }, [])
   const s = pub.status || 'offline'
   const label = ({ online: 'Online & ready', idle: 'Taking a nap', dnd: 'Busy right now', offline: 'Sleeping…' } as any)[s] || 'Sleeping…'
-  const hello = s == 'offline' ? 'zzz... wake me up soon~' : 'Hi hi! I\'m Yukio~'
-  const chips = ['Moderation', 'Live logs', 'Leveling', 'Tickets', 'Anti-nuke', 'Fun commands']
+  const hello = s == 'offline' ? <>zzz... wake me up soon~ 💤</> : <>Hi hi! I'm Yukio~ <span className="wave">👋</span></>
+  const feats = [
+    ['🛡️', 'Moderation', 'Warns, timeouts, bans and purges, all in a few clicks.'],
+    ['📜', 'Live logs', 'Watch joins, edits and deletions as they happen.'],
+    ['✨', 'Leveling', 'XP, ranks and a leaderboard to keep chats lively.'],
+    ['🎫', 'Tickets', 'Tidy support tickets with saved transcripts.'],
+    ['💣', 'Anti-nuke', 'Raid and nuke protection with one-click backups.'],
+    ['🎀', 'Fun commands', 'Little extras that make your server feel cozy.'],
+  ]
+  const stat = (n: any, l: string) => typeof n == 'number' ? <span key={l}><b>{n.toLocaleString()}</b> {l}</span> : null
   return (
     <div id="landing">
+      <i className="blob a" aria-hidden="true" /><i className="blob b" aria-hidden="true" /><i className="blob c" aria-hidden="true" />
       <div className="spk" aria-hidden="true">
         {Array.from({ length: 8 }, (_, i) => <span key={i} style={{ ['--i' as any]: i }} />)}
       </div>
@@ -45,14 +56,20 @@ function Landing() {
           <img src={pub.avatar || AVATAR} alt="Bot avatar" />
           <span className="dot" data-s={s} role="img" aria-label={'Status: ' + s} /></div>
         <h1>Yukio<span className="tag">BOT</span></h1>
+        <OwnerCard />
         <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
-        <p className="pill" data-s={s}><i />{label}</p>
+        <p className="pill" data-s={s} role="status"><i />{label}</p>
+        {s != 'offline' && <div className="stats">
+          {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}{stat(pub.ping, 'ms ping')}
+        </div>}
         <p className="blurb">Your cute little Discord helper that keeps your server safe, tidy and fun.</p>
-        <div className="chips">{chips.map(c => <span key={c}>{c}</span>)}</div>
         <div className="actions">
           <a className="btn p" href="/login">Login with Discord</a>
           <a className="btn" target="_blank" rel="noopener"
              href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
+        </div>
+        <div className="feats">
+          {feats.map(([ic, t, d]) => <div className="feat" key={t}><i aria-hidden="true">{ic}</i><h3>{t}</h3><p>{d}</p></div>)}
         </div>
         <LegalFooter />
       </section>
