@@ -130,7 +130,7 @@ export default function TicketChat({ G, ticket, onClose }: { G: string; ticket: 
               {closed && <i className="off">closed</i>}
             </span>
           </div>
-          <span className={'tc-live' + (live ? '' : ' bad')}>{live ? 'Live' : err ? 'Offline' : 'Loading'}</span>
+
           <button className="tc-x" onClick={onClose} aria-label="Close chat" />
         </div>
 
