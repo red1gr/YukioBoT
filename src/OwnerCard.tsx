@@ -16,9 +16,9 @@ const avatarOf = (u: LY['discord_user']) =>
     : `https://cdn.discordapp.com/embed/avatars/${(Number(BigInt(u.id) >> 22n)) % 6}.png`
 
 const doing = (d: LY): string => {
-  if (d.listening_to_spotify && d.spotify) return `🎵 ${d.spotify.song} - ${d.spotify.artist}`
+  if (d.listening_to_spotify && d.spotify) return `Listening to ${d.spotify.song} - ${d.spotify.artist}`
   const custom = d.activities.find(a => a.type == 4)
-  if (custom?.state) return `${custom.emoji?.name ? custom.emoji.name + ' ' : ''}${custom.state}`
+  if (custom?.state) return custom.state
   const a = d.activities.find(a => a.type != 4)
   if (a) return `${['Playing', 'Streaming', 'Listening to', 'Watching', '', 'Competing in'][a.type] ?? ''} ${a.name}`.trim()
   return ''
@@ -56,7 +56,7 @@ export default function OwnerCard() {
         <i className="own-dot" data-s={s} role="img" aria-label={LABEL[s]} />
       </span>
       <span className="own-tx">
-        <small>Made with 💖 by</small>
+        <small>Developed By</small>
         <b>{name}</b>
         <em>{line || LABEL[s]}</em>
       </span>

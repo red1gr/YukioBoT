@@ -32,18 +32,18 @@ function Landing() {
     }
     load(); const t = setInterval(load, 30000); return () => clearInterval(t)
   }, [])
-  const s = pub.status || 'offline'
-  const label = ({ online: 'Online & ready', idle: 'Taking a nap', dnd: 'Busy right now', offline: 'Sleeping…' } as any)[s] || 'Sleeping…'
-  const hello = s == 'offline' ? <>zzz... wake me up soon~ 💤</> : <>Hi hi! I'm Yukio~ <span className="wave">👋</span></>
   const feats = [
-    ['🛡️', 'Moderation', 'Warns, timeouts, bans and purges, all in a few clicks.'],
-    ['📜', 'Live logs', 'Watch joins, edits and deletions as they happen.'],
-    ['✨', 'Leveling', 'XP, ranks and a leaderboard to keep chats lively.'],
-    ['🎫', 'Tickets', 'Tidy support tickets with saved transcripts.'],
-    ['💣', 'Anti-nuke', 'Raid and nuke protection with one-click backups.'],
-    ['🎀', 'Fun commands', 'Little extras that make your server feel cozy.'],
+    ['Moderation', 'Warns, timeouts, bans and purges in a few clicks.'],
+    ['Live logs', 'Watch joins, edits and deletions as they happen.'],
+    ['Leveling', 'XP, ranks and a leaderboard to keep chats lively.'],
+    ['Tickets', 'Tidy support tickets with saved transcripts.'],
+    ['Anti-nuke', 'Raid and nuke protection with one-click backups.'],
+    ['Fun commands', 'Little extras that make your server cozy.'],
   ]
   const stat = (n: any, l: string) => typeof n == 'number' ? <span key={l}><b>{n.toLocaleString()}</b> {l}</span> : null
+  const s = pub.status || 'offline'
+  const label = ({ online: 'Online & ready', idle: 'Taking a nap', dnd: 'Busy right now', offline: 'Sleeping…' } as any)[s] || 'Sleeping…'
+  const hello = s == 'offline' ? 'zzz... wake me up soon~' : 'Hi hi! I\'m Yukio~'
   return (
     <div id="landing">
       <i className="blob a" aria-hidden="true" /><i className="blob b" aria-hidden="true" /><i className="blob c" aria-hidden="true" />
@@ -51,25 +51,29 @@ function Landing() {
         {Array.from({ length: 8 }, (_, i) => <span key={i} style={{ ['--i' as any]: i }} />)}
       </div>
       <section className="hero">
-        <div className="bubble" role="status">{hello}</div>
-        <div className="av"><i className="ring" aria-hidden="true" />
-          <img src={pub.avatar || AVATAR} alt="Bot avatar" />
-          <span className="dot" data-s={s} role="img" aria-label={'Status: ' + s} /></div>
-        <h1>Yukio<span className="tag">BOT</span></h1>
-        <OwnerCard />
-        <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
-        <p className="pill" data-s={s} role="status"><i />{label}</p>
-        {s != 'offline' && <div className="stats">
-          {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}{stat(pub.ping, 'ms ping')}
-        </div>}
-        <p className="blurb">Your cute little Discord helper that keeps your server safe, tidy and fun.</p>
-        <div className="actions">
-          <a className="btn p" href="/login">Login with Discord</a>
-          <a className="btn" target="_blank" rel="noopener"
-             href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
+        <div className="hero-main">
+          <div className="bubble" role="status">{hello}</div>
+          <div className="av"><i className="ring" aria-hidden="true" />
+            <img src={pub.avatar || AVATAR} alt="Bot avatar" />
+            <span className="dot" data-s={s} role="img" aria-label={'Status: ' + s} /></div>
+          <h1>Yukio<span className="tag">BOT</span></h1>
+          <OwnerCard />
+          <p className="handle">{pub.name ? '@' + pub.name : ''}</p>
+          <p className="pill" data-s={s}><i />{label}</p>
+          {s != 'offline' && <div className="stats">
+            {stat(pub.guilds, 'servers')}{stat(pub.members, 'members')}{stat(pub.ping, 'ms ping')}
+          </div>}
+          <div className="actions">
+            <a className="btn p" href="/login">Login with Discord</a>
+            <a className="btn" target="_blank" rel="noopener"
+               href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
+          </div>
         </div>
-        <div className="feats">
-          {feats.map(([ic, t, d]) => <div className="feat" key={t}><i aria-hidden="true">{ic}</i><h3>{t}</h3><p>{d}</p></div>)}
+        <div className="hero-side">
+          <p className="blurb">Your cute little Discord helper that keeps your server safe, tidy and fun.</p>
+          <div className="feats">
+            {feats.map(([t, d], i) => <div className="feat" key={t}><span className="feat-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{d}</p></div>)}
+          </div>
         </div>
         <LegalFooter />
       </section>
