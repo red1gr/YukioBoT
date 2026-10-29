@@ -12,6 +12,7 @@ const DEF: Record<string, any> = {
   types_json: '', ticket_types: 'Support,Purchase,Bug report',
   panel_title: 'RD TICKETS', panel_text: 'Select a ticket type below to open a ticket.', panel_image: '', panel_thumbnail: '', panel_footer: '',
   panel_style: 'dropdown', button_style: 'blurple', select_placeholder: 'Select a ticket type...', replace_panel: true, embed_color: '0f00ff', v2_panel: false, v2_ticket: false, v2_close: false,
+  claim_style: 'green', close_style: 'red', claim_emoji: '', close_emoji: '', v2_feedback: false,
   v2_box: true, v2_image: true, v2_thumbnail: true, v2_separator: true, v2_footer: true,
   welcome_title: '{type} TICKET', welcome_text: 'Hello {user}, please describe your {type} request. Staff will reply shortly.',
   welcome_image: '', welcome_thumbnail: '', footer_text: '',
@@ -218,11 +219,16 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
   }
 
   /* Components V2 helpers for the previews */
-  const allV2 = !!(v('v2_panel') && v('v2_ticket') && v('v2_close'))
-  const anyV2 = !!(v('v2_panel') || v('v2_ticket') || v('v2_close'))
+  const allV2 = !!(v('v2_panel') && v('v2_ticket') && v('v2_close') && v('v2_feedback'))
+  const anyV2 = !!(v('v2_panel') || v('v2_ticket') || v('v2_close') || v('v2_feedback'))
   const lay = { box: !!v('v2_box'), sep: !!v('v2_separator') }
   const img = (k: string, flag: string) => v('v2_' + flag) ? v(k) : ''
   const typeBtns = list.map((t, i) => <FakeBtn key={i} color={v('button_style')}>{`${t.emoji || ''} ${t.label}`.trim()}</FakeBtn>)
+  const ticketBtns = <div className="tk-btns">
+    {v('claim_enabled') && <FakeBtn color={v('claim_style')}>{`${v('claim_emoji')} ${v('claim_label')}`.trim()}</FakeBtn>}
+    <FakeBtn color={v('close_style')}>{`${v('close_emoji')} ${v('close_label')}`.trim()}</FakeBtn>
+  </div>
+  const fbText = '⭐⭐⭐⭐⭐\nFrom: @Member\nTicket: support-member'
   const panelPick = v('panel_style') == 'buttons'
     ? <div className="tk-btns">{typeBtns}</div>
     : <div className="tk-sel">{v('select_placeholder')} <span>⌄</span></div>
@@ -245,8 +251,6 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
       {B('delete_empty_category', 'Delete the ticket category when it has 0 tickets', 'Only categories used by tickets, and only once they have no channels left. It is recreated when the next ticket opens.')}
       <h3>Buttons inside tickets</h3>
       {B('claim_enabled', 'Show the claim button', 'Staff can claim a ticket; press again to release it.')}
-      {T('claim_label', 'Claim button text')}
-      {T('close_label', 'Close button text')}
       {B('confirm_close', 'Ask for confirmation before closing')}
       {B('ask_reason', 'Ask for a close reason', 'Shows a popup; the reason goes into the log and transcript embed.')}
       {B('allow_user_close', 'Ticket owner can close their own ticket')}
@@ -316,10 +320,18 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
         {T('welcome_thumbnail', 'Thumbnail URL')}
         {T('footer_text', 'Footer')}
         {B('v2_ticket', 'Use Components V2 in new tickets', 'Claim / Close buttons inside the box. Pings are sent as a line above it.')}
+        <h3>Ticket buttons</h3>
+        {T('claim_label', 'Claim text')}
+        {T('claim_emoji', 'Claim emoji', 'Unicode or <:name:id>')}
+        {S('claim_style', 'Claim colour', [['green', 'Green'], ['blurple', 'Blurple'], ['red', 'Red'], ['grey', 'Grey']])}
+        {T('close_label', 'Close text')}
+        {T('close_emoji', 'Close emoji')}
+        {S('close_style', 'Close colour', [['red', 'Red'], ['green', 'Green'], ['blurple', 'Blurple'], ['grey', 'Grey']])}
         <h3>Closing</h3>
         {A('close_text', 'Message when a ticket closes', '{user} {type} {reason}')}
         {A('rating_text', 'DM text asking for a rating')}
         {B('v2_close', 'Use Components V2 for the closed message', 'Reopen / Delete buttons (archive mode) sit inside the box.')}
+        {B('v2_feedback', 'Use Components V2 for the feedback message', 'Posted in the feedback channel after a member rates.')}
         {anyV2 && <>
           <h3>Components V2 layout</h3>
           <p className="dim">No colour bar. Applies to every V2 message and to the preview.</p>
@@ -335,15 +347,22 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
         {v('v2_ticket')
           ? <V2 {...lay} title={v('welcome_title')} text={v('welcome_text')} image={img('welcome_image', 'image')}
               thumb={img('welcome_thumbnail', 'thumbnail')} footer={v('v2_footer') ? v('footer_text') : ''}>
-              <div className="tk-btns">{v('claim_enabled') && <FakeBtn color="green">{v('claim_label')}</FakeBtn>}<FakeBtn color="red">{v('close_label')}</FakeBtn></div>
+              {ticketBtns}
             </V2>
-          : <Embed c={v('embed_color')} title={v('welcome_title')} text={v('welcome_text')} image={v('welcome_image')} thumb={v('welcome_thumbnail')} footer={v('footer_text')} />}
+          : <>
+            <Embed c={v('embed_color')} title={v('welcome_title')} text={v('welcome_text')} image={v('welcome_image')} thumb={v('welcome_thumbnail')} footer={v('footer_text')} />
+            <div className="tk-comp" style={{ marginTop: 8 }}>{ticketBtns}</div>
+          </>}
         <div style={{ height: 14 }} />
         {v('v2_close')
           ? <V2 {...lay} title="TICKET CLOSED" text={v('close_text')} footer="">
               {v('close_mode') == 'archive' && <div className="tk-btns"><FakeBtn color="grey">Reopen</FakeBtn><FakeBtn color="red">Delete</FakeBtn></div>}
             </V2>
           : <Embed c="ff0000" title="TICKET CLOSED" text={v('close_text')} />}
+        <div style={{ height: 14 }} />
+        {v('v2_feedback')
+          ? <V2 {...lay} title="Ticket feedback" text={fbText} footer="" />
+          : <Embed c={v('embed_color')} title="Ticket feedback" text={fbText} />}
       </div>
     </div>}
 
