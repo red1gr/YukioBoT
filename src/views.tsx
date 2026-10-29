@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { api, fmt, dur, toast } from './api'
 import { DesignField, isDesign } from './Designer'
+import './logchannels.css'
 
 type P = { G: string; owner: boolean }
 const Empty = ({ children }: { children: ReactNode }) => <span className="empty">{children}</span>
@@ -148,6 +149,45 @@ function Bans({ G }: { G: string }) {
   </>
 }
 
+/* ---------- Log channels (own tab) ---------- */
+export function LogChannels({ G }: P) {
+  const [g, , setG] = useLoad(() => (G ? api('/guilds/' + G) : Promise.resolve(null)), [G])
+  const [all, setAll] = useState(''); const [busy, setBusy] = useState(false)
+  if (!G) return <Empty>No server selected.</Empty>
+  if (!g) return <Skeleton />
+  if (!g.has_logs_cog) return <Empty>Logs cog is not loaded.</Empty>
+  const channels: any[] = g.channels, types: string[] = g.log_types
+  const cur = (t: string): string => g.log_channels[t] ?? ''
+  const on = types.filter(t => cur(t)).length
+  const put = async (t: string, id: string) => {
+    await api(`/guilds/${G}/logchannel`, { type: t, channel_id: id })
+    setG((x: any) => ({ ...x, log_channels: { ...x.log_channels, [t]: id } }))
+  }
+  const bulk = async (id: string, ask: string) => {
+    if (!confirm(ask)) return
+    setBusy(true)
+    try { for (const t of types) await put(t, id); toast('Saved') } finally { setBusy(false) }
+  }
+  return <>
+    <p className="dim lc-lead">Choose the channel where each type of event is logged. Set a type to "off" to stop logging it.</p>
+    <div className="row lc-bulk">
+      <select aria-label="Channel for all logs" value={all} onChange={e => setAll(e.target.value)}>
+        <option value="">- pick a channel -</option><Opt list={channels} /></select>
+      <button className="p" disabled={!all || busy} onClick={() => bulk(all, `Send all ${types.length} log types to this channel?`)}>Send all logs here</button>
+      <button className="d" disabled={!on || busy} onClick={() => bulk('', 'Turn off all logs?')}>Turn all off</button>
+      <span className="dim">{on}/{types.length} enabled</span>
+    </div>
+    <h3>Event types</h3>
+    {types.map(t => (
+      <div className="row" key={t}>
+        <span className="n">{t.replace(/_/g, ' ')}</span>
+        <select disabled={busy} value={cur(t)} onChange={async e => { await put(t, e.target.value); toast('Saved') }}>
+          <option value="">off</option><Opt list={channels} /></select>
+      </div>
+    ))}
+  </>
+}
+
 export function Server({ G, owner }: P) {
   const [g] = useLoad(() => (G ? api('/guilds/' + G) : Promise.resolve(null)), [G])
   const [msg, setMsg] = useState(''); const [ch, setCh] = useState('')
@@ -159,13 +199,6 @@ export function Server({ G, owner }: P) {
   const cid = ch || channels[0]?.id || ''
   const Chan = <select value={cid} onChange={e => setCh(e.target.value)}><Opt list={channels} /></select>
   return <>
-    <h3>Log channels</h3>
-    {g.has_logs_cog ? g.log_types.map((t: string) => (
-      <div className="row" key={t}><span className="n">{t}</span>
-        <select defaultValue={g.log_channels[t] ?? ''} onChange={async e => { await api(`/guilds/${G}/logchannel`, { type: t, channel_id: e.target.value }); toast('Saved') }}>
-          <option value="">off</option><Opt list={channels} /></select>
-      </div>)) : <Empty>Logs cog is not loaded.</Empty>}
-
     <h3>Send message</h3>
     <div className="row">{Chan}<input placeholder="Message" style={{ flex: 1 }} value={msg} onChange={e => setMsg(e.target.value)} />
       <button className="p" onClick={async () => { await api(`/guilds/${G}/send`, { channel_id: cid, content: msg }); setMsg(''); toast('Sent') }}>Send</button></div>

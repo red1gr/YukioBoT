@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, onToast } from './api'
-import { Overview, Logs, Server, Leaderboard, Settings, Commands } from './views'
+import { Overview, Logs, Server, LogChannels, Leaderboard, Settings, Commands } from './views'
 import SecurityTab from './SecurityTab'
 import TicketsTab from './TicketsTab'
 import Legal, { LegalFooter, legalPage } from './Legal'
@@ -13,7 +13,7 @@ const Security = ({ G }: { G: string; owner: boolean }) =>
   G ? <SecurityTab guildId={G} /> : <span className="empty">No server selected.</span>
 
 const VIEWS = {
-  overview: ['Overview', Overview], logs: ['Live logs', Logs], server: ['Server', Server],
+  overview: ['Overview', Overview], logs: ['Live logs', Logs], server: ['Server', Server], logchannels: ['Log channels', LogChannels],
   security: ['Security', Security],
   leaderboard: ['Leaderboard', Leaderboard], tickets: ['Tickets', TicketsTab], cogs: ['Settings', Settings], commands: ['Commands', Commands],
 } as const
