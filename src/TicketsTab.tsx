@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { api, fmt, toast } from './api'
+import TicketChat from './TicketChat'
 
 type TType = { label: string; emoji?: string; description?: string; welcome?: string; category?: string; ping_role?: string; staff_role?: string; questions?: string }
 
@@ -92,6 +93,7 @@ function Types({ list, onChange, roles }: { list: TType[]; onChange: (l: TType[]
 /* ---------- live view ---------- */
 function Live({ G }: { G: string }) {
   const [rows, setRows] = useState<any[]>(); const [ev, setEv] = useState<any[]>()
+  const [chat, setChat] = useState<any>(null)
   const load = useCallback(async () => {
     try { const r = await api(`/cogs/tickets/action/${G}`, { action: 'list_open', channel_id: '' }); setRows(JSON.parse(r.message)) } catch { setRows(x => x ?? []) }
     api<any[]>(`/events?limit=40&guild_id=${G}&type=ticket`).then(setEv).catch(() => {})
@@ -116,6 +118,7 @@ function Live({ G }: { G: string }) {
     {rows.map(r => <div className="row" key={r.id}>
       <span className="n"><b>#{r.name}</b> <span className={r.closed ? 'off' : 'on'}>{r.closed ? 'closed' : 'open'}</span><br />
         <span className="dim">{r.kind} · {r.owner_name || r.owner}{r.claim ? ` · claimed by ${r.claim_name || r.claim}` : ''} · {fmt(r.created)}</span></span>
+      <button className="p" onClick={() => setChat(r)}>View chat</button>
       {!r.closed && <button onClick={() => act('close_ticket', r.id, `Close #${r.name}?`)}>Close</button>}
       <button className="d" onClick={() => act('delete_ticket', r.id, `Delete #${r.name} permanently?`)}>Delete</button>
     </div>)}
@@ -123,6 +126,7 @@ function Live({ G }: { G: string }) {
     <h3>History</h3>
     {ev?.map((e, i) => <div className="row" key={i}><span className="dim mono">{fmt(e.ts)}</span><b>{e.title}</b><span className="n">{e.body}</span></div>)}
     {ev && !ev.length && <Empty>Nothing yet.</Empty>}
+    {chat && <TicketChat G={G} ticket={chat} onClose={() => setChat(null)} />}
   </>
 }
 
