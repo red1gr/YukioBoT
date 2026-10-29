@@ -30,17 +30,38 @@ const Opts = ({ list, pre = '' }: { list: any[]; pre?: string }) => <>{list.map(
 const Row = ({ label, hint, children }: { label: ReactNode; hint?: ReactNode; children: ReactNode }) =>
   <div className="row"><span className="n">{label}{hint && <><br /><span className="dim">{hint}</span></>}</span>{children}</div>
 
+const fill = (s?: string) => String(s || '').replace(/\{user\}/g, '@Member').replace(/\{type\}/g, 'Support').replace(/\{server\}/g, 'My Server')
+  .replace(/\{number\}/g, '0001').replace(/\{staff\}/g, '@Staff').replace(/\{reason\}/g, '-')
+
 /* Discord-style embed preview */
 function Embed({ c, title, text, image, thumb, footer }: { c: string; title?: string; text?: string; image?: string; thumb?: string; footer?: string }) {
-  const f = (s?: string) => String(s || '').replace(/\{user\}/g, '@Member').replace(/\{type\}/g, 'Support').replace(/\{server\}/g, 'My Server')
-    .replace(/\{number\}/g, '0001').replace(/\{staff\}/g, '@Staff').replace(/\{reason\}/g, '-')
   return <div className="tk-emb" style={{ borderLeftColor: '#' + (c || '0f00ff').replace('#', '') }}>
     {thumb && <img className="th" src={thumb} alt="" />}
-    {title && <b>{f(title)}</b>}<p>{f(text)}</p>
+    {title && <b>{fill(title)}</b>}<p>{fill(text)}</p>
     {image && <img className="im" src={image} alt="" />}
-    {footer && <small>{f(footer)}</small>}
+    {footer && <small>{fill(footer)}</small>}
   </div>
 }
+
+/* Components V2 preview: container, no colour bar */
+function V2({ box, title, text, image, thumb, footer, sep, children }: {
+  box: boolean; title?: string; text?: string; image?: string; thumb?: string; footer?: string; sep: boolean; children?: ReactNode
+}) {
+  return <div className={'tk-v2' + (box ? ' box' : '')}>
+    <div className="tk-v2-top">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {title && <b>{fill(title)}</b>}<p>{fill(text)}</p>
+      </div>
+      {thumb && <img className="th" src={thumb} alt="" />}
+    </div>
+    {image && <img className="im" src={image} alt="" />}
+    {sep && !!children && <hr />}
+    {children}
+    {footer && <small>{fill(footer)}</small>}
+  </div>
+}
+const FakeBtn = ({ children, color = 'blurple' }: { children: ReactNode; color?: string }) =>
+  <span className={'tk-btn ' + color}>{children}</span>
 
 /* multi role picker -> comma separated ids */
 function Roles({ value, onChange, roles }: { value: string; onChange: (v: string) => void; roles: any[] }) {
@@ -196,6 +217,16 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
     } finally { b.disabled = false }
   }
 
+  /* Components V2 helpers for the previews */
+  const allV2 = !!(v('v2_panel') && v('v2_ticket') && v('v2_close'))
+  const anyV2 = !!(v('v2_panel') || v('v2_ticket') || v('v2_close'))
+  const lay = { box: !!v('v2_box'), sep: !!v('v2_separator') }
+  const img = (k: string, flag: string) => v('v2_' + flag) ? v(k) : ''
+  const typeBtns = list.map((t, i) => <FakeBtn key={i} color={v('button_style')}>{`${t.emoji || ''} ${t.label}`.trim()}</FakeBtn>)
+  const panelPick = v('panel_style') == 'buttons'
+    ? <div className="tk-btns">{typeBtns}</div>
+    : <div className="tk-sel">{v('select_placeholder')} <span>⌄</span></div>
+
   return <>
     <div className="tk-tabs">
       {TABS.map(([k, l]) => <button key={k} className={tab == k ? 'p' : ''} onClick={() => setTab(k)}>{l}</button>)}
@@ -238,16 +269,16 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
           {T('panel_image', 'Image URL')}
           {T('panel_thumbnail', 'Thumbnail URL')}
           {T('panel_footer', 'Footer')}
-          {Col('embed_color', 'Embed colour (classic embeds only, not used by Components V2)')}
+          {!allV2 && Col('embed_color', 'Embed colour (classic embeds only)')}
           {S('panel_style', 'Style', [['dropdown', 'Dropdown'], ['buttons', 'Buttons']])}
           {v('panel_style') == 'buttons'
             ? S('button_style', 'Button colour', [['blurple', 'Blurple'], ['green', 'Green'], ['red', 'Red'], ['grey', 'Grey']])
             : T('select_placeholder', 'Dropdown placeholder')}
           {B('replace_panel', 'Delete the old panel when posting a new one')}
           {B('v2_panel', 'Use Components V2 for the panel', 'Container layout with the dropdown or buttons inside it. Falls back to an embed if Discord rejects it.')}
-          {!!(v('v2_panel') || v('v2_ticket') || v('v2_close')) && <>
+          {anyV2 && <>
             <h3>Components V2 layout</h3>
-            <p className="dim">No colour bar. Pick which parts to show (applies to every V2 message).</p>
+            <p className="dim">No colour bar. Applies to every V2 message and to the preview.</p>
             {B('v2_box', 'Container box')}
             {B('v2_image', 'Image')}
             {B('v2_thumbnail', 'Thumbnail')}
@@ -256,8 +287,15 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
           </>}
         </div>
         <div><h3>Preview</h3>
-          <Embed c={v('embed_color')} title={v('panel_title')} text={v('panel_text')} image={v('panel_image')} thumb={v('panel_thumbnail')} footer={v('panel_footer')} />
-          {!!v('v2_panel') && <p className="dim" style={{ marginTop: 10 }}>Components V2: the {v('panel_style') == 'buttons' ? 'buttons' : 'dropdown'} sit inside the box instead of under it.</p>}
+          {v('v2_panel')
+            ? <V2 {...lay} title={v('panel_title')} text={v('panel_text')} image={img('panel_image', 'image')}
+                thumb={img('panel_thumbnail', 'thumbnail')} footer={v('v2_footer') ? v('panel_footer') : ''}>
+                {panelPick}
+              </V2>
+            : <>
+              <Embed c={v('embed_color')} title={v('panel_title')} text={v('panel_text')} image={v('panel_image')} thumb={v('panel_thumbnail')} footer={v('panel_footer')} />
+              <div className="tk-comp" style={{ marginTop: 8 }}>{panelPick}</div>
+            </>}
           <p className="dim" style={{ marginTop: 10 }}>{list.length} type{list.length == 1 ? '' : 's'}: {list.map(t => `${t.emoji || ''} ${t.label}`.trim()).join(', ') || 'none'}</p>
         </div>
       </div>
@@ -282,11 +320,30 @@ export default function TicketsTab({ G }: { G: string; owner?: boolean }) {
         {A('close_text', 'Message when a ticket closes', '{user} {type} {reason}')}
         {A('rating_text', 'DM text asking for a rating')}
         {B('v2_close', 'Use Components V2 for the closed message', 'Reopen / Delete buttons (archive mode) sit inside the box.')}
+        {anyV2 && <>
+          <h3>Components V2 layout</h3>
+          <p className="dim">No colour bar. Applies to every V2 message and to the preview.</p>
+          {B('v2_box', 'Container box')}
+          {B('v2_image', 'Image')}
+          {B('v2_thumbnail', 'Thumbnail')}
+          {B('v2_separator', 'Divider line before the buttons')}
+          {B('v2_footer', 'Footer')}
+        </>}
+        {!allV2 && Col('embed_color', 'Embed colour (classic embeds only)')}
       </div>
       <div><h3>Preview</h3>
-        <Embed c={v('embed_color')} title={v('welcome_title')} text={v('welcome_text')} image={v('welcome_image')} thumb={v('welcome_thumbnail')} footer={v('footer_text')} />
+        {v('v2_ticket')
+          ? <V2 {...lay} title={v('welcome_title')} text={v('welcome_text')} image={img('welcome_image', 'image')}
+              thumb={img('welcome_thumbnail', 'thumbnail')} footer={v('v2_footer') ? v('footer_text') : ''}>
+              <div className="tk-btns">{v('claim_enabled') && <FakeBtn color="green">{v('claim_label')}</FakeBtn>}<FakeBtn color="red">{v('close_label')}</FakeBtn></div>
+            </V2>
+          : <Embed c={v('embed_color')} title={v('welcome_title')} text={v('welcome_text')} image={v('welcome_image')} thumb={v('welcome_thumbnail')} footer={v('footer_text')} />}
         <div style={{ height: 14 }} />
-        <Embed c="ff0000" title="TICKET CLOSED" text={v('close_text')} />
+        {v('v2_close')
+          ? <V2 {...lay} title="TICKET CLOSED" text={v('close_text')} footer="">
+              {v('close_mode') == 'archive' && <div className="tk-btns"><FakeBtn color="grey">Reopen</FakeBtn><FakeBtn color="red">Delete</FakeBtn></div>}
+            </V2>
+          : <Embed c="ff0000" title="TICKET CLOSED" text={v('close_text')} />}
       </div>
     </div>}
 

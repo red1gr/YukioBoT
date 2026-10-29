@@ -214,3 +214,20 @@ nav a[data-v=tickets]{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/
 .tk-emb .im{display:block;max-width:100%;border-radius:6px;margin-top:10px}
 .tk-emb small{display:block;margin-top:10px;color:var(--dim);font-size:11.5px}
 @media(max-width:900px){.tk-tabs .sp{display:none}}
+
+/* Components V2 preview */
+.tk-v2{max-width:480px;padding:2px 0}
+.tk-v2.box{padding:14px 16px;border-radius:12px;background:#111a2e;border:1px solid var(--line2)}
+.tk-v2-top{display:flex;gap:12px;align-items:flex-start}
+.tk-v2 b{display:block;margin-bottom:4px}
+.tk-v2 p{margin:0;white-space:pre-wrap;color:#c6dcf0;overflow-wrap:anywhere}
+.tk-v2 .th{flex:none;width:64px;height:64px;object-fit:cover;border-radius:8px}
+.tk-v2 .im{display:block;max-width:100%;border-radius:8px;margin-top:12px}
+.tk-v2 hr{border:0;border-top:1px solid var(--line2);margin:14px 0 10px}
+.tk-v2 small{display:block;margin-top:10px;color:var(--dim);font-size:11.5px}
+.tk-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tk-v2 hr+.tk-btns,.tk-v2 hr+.tk-sel{margin-top:0}
+.tk-btn{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;color:#fff;background:#5865f2}
+.tk-btn.green{background:#248046}.tk-btn.red{background:#da373c}.tk-btn.grey{background:#4e5058}
+.tk-sel{display:flex;justify-content:space-between;align-items:center;margin-top:10px;max-width:420px;padding:9px 12px;border-radius:6px;background:#1e1f22;color:#b5bac1;font-size:13.5px}
+.tk-comp{max-width:480px}
