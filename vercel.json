@@ -3,6 +3,8 @@
     { "source": "/api/:path*", "destination": "http://78.154.103.46:10884/api/:path*" },
     { "source": "/login",      "destination": "http://78.154.103.46:10884/login" },
     { "source": "/callback",   "destination": "http://78.154.103.46:10884/callback" },
-    { "source": "/logout",     "destination": "http://78.154.103.46:10884/logout" }
+    { "source": "/logout",     "destination": "http://78.154.103.46:10884/logout" },
+    { "source": "/terms-of-service", "destination": "/index.html" },
+    { "source": "/privacy-policy",   "destination": "/index.html" }
   ]
 }
