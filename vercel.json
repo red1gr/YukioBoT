@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/invite",
+      "destination": "https://discord.com/oauth2/authorize?client_id=1554260133515886712&permissions=8&scope=bot%20applications.commands",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "http://78.154.103.46:10884/api/:path*" },
     { "source": "/login",      "destination": "http://78.154.103.46:10884/login" },
