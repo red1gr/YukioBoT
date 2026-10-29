@@ -5,6 +5,7 @@ import SecurityTab from './SecurityTab'
 import TicketsTab from './TicketsTab'
 import Legal, { LegalFooter, legalPage } from './Legal'
 import GuildPicker from './GuildPicker'
+import './usercard.css'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
 const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
@@ -59,7 +60,19 @@ function Landing() {
   )
 }
 
-function Dashboard({ guilds, owner }: { guilds: any[]; owner: boolean }) {
+function UserCard({ me }: { me: any }) {
+  const [bad, setBad] = useState(false)
+  return (
+    <div className="nv-user">
+      {me.avatar && !bad
+        ? <img src={me.avatar} alt="" onError={() => setBad(true)} />
+        : <span className="nv-fb" aria-hidden="true">{String(me.name || '?')[0].toUpperCase()}</span>}
+      <span className="nv-tx"><b title={me.name}>{me.name}</b>{me.owner && <em>Bot admin</em>}</span>
+    </div>
+  )
+}
+
+function Dashboard({ guilds, owner, me }: { guilds: any[]; owner: boolean; me?: any }) {
   const initial = location.hash.slice(1) as ViewKey
   const [view, setView] = useState<ViewKey>(KEYS.includes(initial) ? initial : 'overview')
   const [G, setG] = useState(() => {
@@ -87,7 +100,8 @@ function Dashboard({ guilds, owner }: { guilds: any[]; owner: boolean }) {
              aria-current={view == k ? 'page' : undefined} onClick={() => go(k)}
              onKeyDown={e => (e.key == 'Enter' || e.key == ' ') && (e.preventDefault(), go(k))}>{VIEWS[k][0]}</a>
         ))}
-        <a href="/logout" style={{ marginTop: 'auto' }} onClick={async e => {
+        {me && <UserCard me={me} />}
+        <a href="/logout" className="nv-out" style={me ? undefined : { marginTop: 'auto' }} onClick={async e => {
           e.preventDefault()
           try { await fetch('/logout', { redirect: 'manual', credentials: 'same-origin' }) } catch {}
           location.replace('/')
@@ -123,16 +137,16 @@ function Toasts() {
 
 export default function App() {
   const legal = legalPage()
-  const [state, setState] = useState<{ s: 'loading' | 'out' | 'in'; guilds?: any[]; owner?: boolean }>({ s: 'loading' })
+  const [state, setState] = useState<{ s: 'loading' | 'out' | 'in'; guilds?: any[]; owner?: boolean; me?: any }>({ s: 'loading' })
   useEffect(() => {
     if (legal) return
     ;(async () => {
       try {
         const r = await fetch('/api/guilds')
         if (r.ok) {
-          let owner = false
-          try { owner = !!(await (await fetch('/api/me')).json()).owner } catch {}
-          return setState({ s: 'in', guilds: await r.json(), owner })
+          let me: any = null
+          try { const mr = await fetch('/api/me'); if (mr.ok) me = await mr.json() } catch {}
+          return setState({ s: 'in', guilds: await r.json(), owner: !!me?.owner, me })
         }
       } catch {}
       setState({ s: 'out' })
@@ -141,7 +155,7 @@ export default function App() {
   if (legal) return <Legal page={legal} />
   return (<>
     {state.s == 'out' && <Landing />}
-    {state.s == 'in' && <Dashboard guilds={state.guilds!} owner={!!state.owner} />}
+    {state.s == 'in' && <Dashboard guilds={state.guilds!} owner={!!state.owner} me={state.me} />}
     <Toasts />
   </>)
 }

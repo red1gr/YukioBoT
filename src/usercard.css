@@ -1,0 +1,12 @@
+.nv-user{display:flex;align-items:center;gap:10px;margin:auto 0 6px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(5,10,20,.5)}
+.nv-user img,.nv-fb{flex:none;width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--panel2)}
+.nv-fb{display:grid;place-items:center;font-weight:800;color:#031322;background:var(--grad)}
+.nv-tx{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.2}
+.nv-tx b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700;color:var(--ink)}
+.nv-tx em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:99px;color:#031322;background:var(--grad)}
+@media(max-width:820px){
+  .nv-user{margin:0 0 0 auto;padding:3px;border:0;background:none}
+  .nv-user img,.nv-fb{width:32px;height:32px}
+  .nv-tx{display:none}
+  #app nav a.nv-out{margin:0 0 0 6px!important}
+}
