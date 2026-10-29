@@ -37,8 +37,8 @@ function Landing() {
     ['Live logs', 'Watch joins, edits and deletions as they happen.'],
     ['Leveling', 'XP, ranks and a leaderboard to keep chats lively.'],
     ['Tickets', 'Tidy support tickets with saved transcripts.'],
-    ['Anti-nuke', 'Raid and nuke protection with one-click backups.'],
-    ['Fun commands', 'Little extras that make your server cozy.'],
+    ['Full Security', 'Raid and nuke protection with one-click backups.'],
+    ['More commands', 'Little extras that make your server cozy.'],
   ]
   const stat = (n: any, l: string) => typeof n == 'number' ? <span key={l}><b>{n.toLocaleString()}</b> {l}</span> : null
   const s = pub.status || 'offline'
