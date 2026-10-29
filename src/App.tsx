@@ -3,6 +3,7 @@ import { api, onToast } from './api'
 import { Overview, Logs, Server, Leaderboard, Settings, Commands } from './views'
 import SecurityTab from './SecurityTab'
 import TicketsTab from './TicketsTab'
+import Legal, { LegalFooter, legalPage } from './Legal'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID ?? '1554260133515886712'
 const AVATAR = 'https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg'
@@ -51,6 +52,7 @@ function Landing() {
           <a className="btn" target="_blank" rel="noopener"
              href={`https://discord.com/oauth2/authorize?client_id=${BOT_ID}&permissions=8&scope=bot%20applications.commands`}>Invite the bot</a>
         </div>
+        <LegalFooter />
       </section>
     </div>
   )
@@ -121,9 +123,11 @@ function Toasts() {
 }
 
 export default function App() {
+  const legal = legalPage()
   const [state, setState] = useState<{ s: 'loading' | 'out' | 'in'; guilds?: any[]; owner?: boolean }>({ s: 'loading' })
   useEffect(() => {
-    (async () => {
+    if (legal) return
+    ;(async () => {
       try {
         const r = await fetch('/api/guilds')
         if (r.ok) {
@@ -135,6 +139,7 @@ export default function App() {
       setState({ s: 'out' })
     })()
   }, [])
+  if (legal) return <Legal page={legal} />
   return (<>
     {state.s == 'out' && <Landing />}
     {state.s == 'in' && <Dashboard guilds={state.guilds!} owner={!!state.owner} />}
