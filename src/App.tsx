@@ -60,14 +60,20 @@ function Landing() {
   )
 }
 
-function UserCard({ me }: { me: any }) {
+function UserCard({ me, onLogout }: { me: any; onLogout: (e: React.MouseEvent) => void }) {
   const [bad, setBad] = useState(false)
   return (
     <div className="nv-user">
-      {me.avatar && !bad
-        ? <img src={me.avatar} alt="" onError={() => setBad(true)} />
-        : <span className="nv-fb" aria-hidden="true">{String(me.name || '?')[0].toUpperCase()}</span>}
-      <span className="nv-tx"><b title={me.name}>{me.name}</b>{me.owner && <em>Bot admin</em>}</span>
+      <span className={'nv-av' + (me.owner ? ' adm' : '')}>
+        {me.avatar && !bad
+          ? <img src={me.avatar} alt="" onError={() => setBad(true)} />
+          : <span className="nv-fb" aria-hidden="true">{String(me.name || '?')[0].toUpperCase()}</span>}
+      </span>
+      <span className="nv-tx">
+        <b title={me.name}>{me.name}</b>
+        <small className={me.owner ? 'adm' : ''}>{me.owner ? 'Bot admin' : 'Server admin'}</small>
+      </span>
+      <a href="/logout" className="nv-out" title="Log out" aria-label="Log out" onClick={onLogout} />
     </div>
   )
 }
@@ -90,6 +96,12 @@ function Dashboard({ guilds, owner, me }: { guilds: any[]; owner: boolean; me?: 
     addEventListener('keydown', h); return () => removeEventListener('keydown', h)
   }, [])
 
+  const logout = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    try { await fetch('/logout', { redirect: 'manual', credentials: 'same-origin' }) } catch {}
+    location.replace('/')
+  }
+
   const View = VIEWS[view][1] as any
   return (
     <div id="app">
@@ -100,12 +112,9 @@ function Dashboard({ guilds, owner, me }: { guilds: any[]; owner: boolean; me?: 
              aria-current={view == k ? 'page' : undefined} onClick={() => go(k)}
              onKeyDown={e => (e.key == 'Enter' || e.key == ' ') && (e.preventDefault(), go(k))}>{VIEWS[k][0]}</a>
         ))}
-        {me && <UserCard me={me} />}
-        <a href="/logout" className="nv-out" style={me ? undefined : { marginTop: 'auto' }} onClick={async e => {
-          e.preventDefault()
-          try { await fetch('/logout', { redirect: 'manual', credentials: 'same-origin' }) } catch {}
-          location.replace('/')
-        }}>Log out</a>
+        {me
+          ? <UserCard me={me} onLogout={logout} />
+          : <a href="/logout" style={{ marginTop: 'auto' }} onClick={logout}>Log out</a>}
       </nav>
       <main>
         <header>
