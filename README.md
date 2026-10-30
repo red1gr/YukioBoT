@@ -23,11 +23,6 @@
   <a href="https://github.com/red1gr/YukioBoT/issues"><b>REQUEST A FEATURE</b></a>
 </p>
 
-<p align="center">
-  <a href="https://yukio.red1gr.dev/">
-    <img src="https://opengraph.githubassets.com/1/red1gr/YukioBoT" alt="YUKIO DASHBOARD PREVIEW" width="800" />
-  </a>
-</p>
 
 ---
 
