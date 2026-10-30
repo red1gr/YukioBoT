@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://avatars.githubusercontent.com/u/193295439?s=200&v=4" alt="YUKIO LOGO" width="120" height="120" />
+<img src="https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg" alt="YUKIO LOGO" width="60" height="60" />
 
 # YUKIO DASHBOARD
 
@@ -19,13 +19,7 @@
 
 [**LIVE DEMO**](https://yukio.red1gr.dev/) &nbsp;|&nbsp; [**REPORT A BUG**](https://github.com/red1gr/YukioBoT/issues) &nbsp;|&nbsp; [**REQUEST A FEATURE**](https://github.com/red1gr/YukioBoT/issues)
 
-<br />
 
-<a href="https://yukio.red1gr.dev/">
-  <img src="https://opengraph.githubassets.com/1/red1gr/YukioBoT" alt="YUKIO DASHBOARD PREVIEW" width="800" />
-</a>
-
-</div>
 
 ---
 
@@ -48,55 +42,7 @@
 
 YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH DISCORD, PICK A SERVER AND MANAGE THE BOT DIRECTLY FROM THE BROWSER: LIVE LOGS, MODERATION, LEVELING, COGS AND PER-SERVER SETTINGS.
 
----
 
-## PREVIEW
-
-> PLACE YOUR SCREENSHOTS IN `docs/screenshots/` USING THE FILE NAMES BELOW AND THEY WILL SHOW UP HERE AUTOMATICALLY.
-
-### LANDING PAGE
-
-<p align="center">
-  <img src="docs/screenshots/landing.png" alt="LANDING PAGE PREVIEW" width="800" />
-</p>
-
-### OVERVIEW
-
-<p align="center">
-  <img src="docs/screenshots/overview.png" alt="OVERVIEW PREVIEW" width="800" />
-</p>
-
-### LIVE LOGS
-
-<p align="center">
-  <img src="docs/screenshots/logs.png" alt="LIVE LOGS PREVIEW" width="800" />
-</p>
-
-### SERVER TOOLS AND MODERATION
-
-<p align="center">
-  <img src="docs/screenshots/server.png" alt="SERVER TOOLS PREVIEW" width="800" />
-</p>
-
-### LEADERBOARD
-
-<p align="center">
-  <img src="docs/screenshots/leaderboard.png" alt="LEADERBOARD PREVIEW" width="800" />
-</p>
-
-### SETTINGS AND COGS
-
-<p align="center">
-  <img src="docs/screenshots/settings.png" alt="SETTINGS PREVIEW" width="800" />
-</p>
-
-### MOBILE
-
-<p align="center">
-  <img src="docs/screenshots/mobile.png" alt="MOBILE PREVIEW" width="300" />
-</p>
-
----
 
 ## FEATURES
 
