@@ -1,113 +1,230 @@
-# Yukio Dashboard
+<div align="center">
 
-A web dashboard for the **Yukio** Discord bot. Sign in with Discord, pick a server and manage the bot from the browser: live logs, moderation, leveling, cogs and per-server settings.
+<img src="https://avatars.githubusercontent.com/u/193295439?s=200&v=4" alt="YUKIO LOGO" width="120" height="120" />
 
-![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white)
-![Vercel](https://img.shields.io/badge/Deploy-Vercel-000?logo=vercel&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+# YUKIO DASHBOARD
 
-## Features
+**A WEB DASHBOARD FOR THE YUKIO DISCORD BOT.**
+**LIVE LOGS. MODERATION. LEVELING. PER-SERVER SETTINGS.**
 
-- **Landing page** with the bot's live status, avatar and an invite button
-- **Discord OAuth2 login**, with the session handled by the bot backend
-- **Overview**: ping, uptime, servers, members, cogs, commands, 7-day activity chart and latest events
-- **Live logs**: auto-refreshing feed with search, type filter, CSV export and pruning
-- **Server tools**: log channel mapping, send messages and embeds, purge, DM, member search with warn / timeout / nickname / kick / ban, warnings and bans lists
-- **Leaderboard**: XP, level and message counts per server
-- **Settings**: load, unload and reload cogs, and edit each cog's per-server settings and actions
-- **Commands**: browsable list of the bot's slash commands
-- **Owner-only controls** for presence, DMs and log pruning
-- Responsive layout, keyboard shortcuts (`1` to `6` switch views) and reduced-motion support
+<br />
 
-## Tech stack
+[![REACT](https://img.shields.io/badge/REACT-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![TYPESCRIPT](https://img.shields.io/badge/TYPESCRIPT-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![VITE](https://img.shields.io/badge/VITE-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![VERCEL](https://img.shields.io/badge/DEPLOY-VERCEL-000?logo=vercel&logoColor=white)](https://vercel.com)
+[![LICENSE: MIT](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 
-| Area | Choice |
-| --- | --- |
-| UI | React 18 + TypeScript |
-| Build | Vite 5 |
-| Styling | Plain CSS with design tokens (`src/styles.css`) |
-| Hosting | Vercel, with rewrites proxying to the bot backend |
+<br />
 
-## Project structure
+[**LIVE DEMO**](https://yukio.red1gr.dev/) &nbsp;|&nbsp; [**REPORT A BUG**](https://github.com/red1gr/YukioBoT/issues) &nbsp;|&nbsp; [**REQUEST A FEATURE**](https://github.com/red1gr/YukioBoT/issues)
+
+<br />
+
+<a href="https://yukio.red1gr.dev/">
+  <img src="https://opengraph.githubassets.com/1/red1gr/YukioBoT" alt="YUKIO DASHBOARD PREVIEW" width="800" />
+</a>
+
+</div>
+
+---
+
+## TABLE OF CONTENTS
+
+- [OVERVIEW](#overview)
+- [PREVIEW](#preview)
+- [FEATURES](#features)
+- [TECH STACK](#tech-stack)
+- [PROJECT STRUCTURE](#project-structure)
+- [GETTING STARTED](#getting-started)
+- [DEPLOYING TO VERCEL](#deploying-to-vercel)
+- [BACKEND API](#backend-api)
+- [CONTRIBUTING](#contributing)
+- [LICENSE](#license)
+
+---
+
+## OVERVIEW
+
+YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH DISCORD, PICK A SERVER AND MANAGE THE BOT DIRECTLY FROM THE BROWSER: LIVE LOGS, MODERATION, LEVELING, COGS AND PER-SERVER SETTINGS.
+
+---
+
+## PREVIEW
+
+> PLACE YOUR SCREENSHOTS IN `docs/screenshots/` USING THE FILE NAMES BELOW AND THEY WILL SHOW UP HERE AUTOMATICALLY.
+
+### LANDING PAGE
+
+<p align="center">
+  <img src="docs/screenshots/landing.png" alt="LANDING PAGE PREVIEW" width="800" />
+</p>
+
+### OVERVIEW
+
+<p align="center">
+  <img src="docs/screenshots/overview.png" alt="OVERVIEW PREVIEW" width="800" />
+</p>
+
+### LIVE LOGS
+
+<p align="center">
+  <img src="docs/screenshots/logs.png" alt="LIVE LOGS PREVIEW" width="800" />
+</p>
+
+### SERVER TOOLS AND MODERATION
+
+<p align="center">
+  <img src="docs/screenshots/server.png" alt="SERVER TOOLS PREVIEW" width="800" />
+</p>
+
+### LEADERBOARD
+
+<p align="center">
+  <img src="docs/screenshots/leaderboard.png" alt="LEADERBOARD PREVIEW" width="800" />
+</p>
+
+### SETTINGS AND COGS
+
+<p align="center">
+  <img src="docs/screenshots/settings.png" alt="SETTINGS PREVIEW" width="800" />
+</p>
+
+### MOBILE
+
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="MOBILE PREVIEW" width="300" />
+</p>
+
+---
+
+## FEATURES
+
+| AREA | WHAT YOU GET |
+|------|--------------|
+| **LANDING PAGE** | THE BOT'S LIVE STATUS, AVATAR AND AN INVITE BUTTON |
+| **LOGIN** | DISCORD OAUTH2, WITH THE SESSION HANDLED BY THE BOT BACKEND |
+| **OVERVIEW** | PING, UPTIME, SERVERS, MEMBERS, COGS, COMMANDS, 7-DAY ACTIVITY CHART AND LATEST EVENTS |
+| **LIVE LOGS** | AUTO-REFRESHING FEED WITH SEARCH, TYPE FILTER, CSV EXPORT AND PRUNING |
+| **SERVER TOOLS** | LOG CHANNEL MAPPING, SEND MESSAGES AND EMBEDS, PURGE, DM, MEMBER SEARCH WITH WARN / TIMEOUT / NICKNAME / KICK / BAN, WARNINGS AND BANS LISTS |
+| **LEADERBOARD** | XP, LEVEL AND MESSAGE COUNTS PER SERVER |
+| **SETTINGS** | LOAD, UNLOAD AND RELOAD COGS, AND EDIT EACH COG'S PER-SERVER SETTINGS AND ACTIONS |
+| **COMMANDS** | BROWSABLE LIST OF THE BOT'S SLASH COMMANDS |
+| **OWNER CONTROLS** | PRESENCE, DMS AND LOG PRUNING |
+| **INTERFACE** | RESPONSIVE LAYOUT, KEYBOARD SHORTCUTS (`1` TO `6` SWITCH VIEWS) AND REDUCED-MOTION SUPPORT |
+
+---
+
+## TECH STACK
+
+| AREA | CHOICE |
+|------|--------|
+| UI | REACT 18 + TYPESCRIPT |
+| BUILD | VITE 5 |
+| STYLING | PLAIN CSS WITH DESIGN TOKENS (`src/styles.css`) |
+| HOSTING | VERCEL, WITH REWRITES PROXYING TO THE BOT BACKEND |
+
+---
+
+## PROJECT STRUCTURE
 
 ```
 .
 ├── index.html
-├── vercel.json          # proxies /api, /login, /callback, /logout to the backend
-├── vite.config.ts       # same proxy for local dev
+├── vercel.json          # PROXIES /api, /login, /callback, /logout TO THE BACKEND
+├── vite.config.ts       # SAME PROXY FOR LOCAL DEV
 └── src/
-    ├── main.tsx         # entry point
-    ├── App.tsx          # landing, dashboard shell, toasts
-    ├── views.tsx        # Overview, Logs, Server, Leaderboard, Settings, Commands
-    ├── api.ts           # fetch helper and toast bus
+    ├── main.tsx         # ENTRY POINT
+    ├── App.tsx          # LANDING, DASHBOARD SHELL, TOASTS
+    ├── views.tsx        # OVERVIEW, LOGS, SERVER, LEADERBOARD, SETTINGS, COMMANDS
+    ├── api.ts           # FETCH HELPER AND TOAST BUS
     └── styles.css
 ```
 
-## Getting started
+---
 
-**Requirements:** Node.js 18 or newer and a running Yukio bot backend that exposes the API below.
+## GETTING STARTED
+
+**REQUIREMENTS:** NODE.JS 18 OR NEWER AND A RUNNING YUKIO BOT BACKEND THAT EXPOSES THE API BELOW.
 
 ```bash
 npm install
-cp .env.example .env     # on Windows: copy .env.example .env
+cp .env.example .env     # ON WINDOWS: copy .env.example .env
 npm run dev
 ```
 
-The app runs at `http://localhost:5173`. The dev server forwards `/api`, `/login` and `/logout` to `VITE_BACKEND`.
+THE APP RUNS AT `http://localhost:5173`. THE DEV SERVER FORWARDS `/api`, `/login` AND `/logout` TO `VITE_BACKEND`.
 
-### Environment variables
+### ENVIRONMENT VARIABLES
 
-| Variable | Used for | Required |
-| --- | --- | --- |
-| `VITE_BOT_ID` | Discord client ID for the invite link | Yes |
-| `VITE_BACKEND` | Backend URL for the local dev proxy only | Dev only |
+| VARIABLE | USED FOR | REQUIRED |
+|----------|----------|----------|
+| `VITE_BOT_ID` | DISCORD CLIENT ID FOR THE INVITE LINK | YES |
+| `VITE_BACKEND` | BACKEND URL FOR THE LOCAL DEV PROXY ONLY | DEV ONLY |
 
-`VITE_` variables are bundled into the public JavaScript. **Never** put the bot token or OAuth client secret in one of them. Those stay on the backend.
+> **WARNING:** `VITE_` VARIABLES ARE BUNDLED INTO THE PUBLIC JAVASCRIPT. **NEVER** PUT THE BOT TOKEN OR OAUTH CLIENT SECRET IN ONE OF THEM. THOSE STAY ON THE BACKEND.
 
-### Scripts
+### SCRIPTS
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Type-check and build to `dist/` |
-| `npm run preview` | Serve the production build locally |
+| COMMAND | DESCRIPTION |
+|---------|-------------|
+| `npm run dev` | START THE DEV SERVER |
+| `npm run build` | TYPE-CHECK AND BUILD TO `dist/` |
+| `npm run preview` | SERVE THE PRODUCTION BUILD LOCALLY |
 
-## Deploying to Vercel
+---
 
-1. Import the repository in Vercel. The Vite preset is detected automatically.
-2. Add `VITE_BOT_ID` under **Settings → Environment Variables**, then deploy.
-3. Edit the destinations in `vercel.json` if your backend address changes.
-4. In the [Discord Developer Portal](https://discord.com/developers/applications), add `https://<your-domain>/callback` as an OAuth2 redirect URI, and use the same value in your backend config.
+## DEPLOYING TO VERCEL
 
-Make sure the backend redirects to a relative `/` after login and does not set a cookie `Domain` tied to its own address. Otherwise users can end up on the backend host instead of the Vercel site.
+1. IMPORT THE REPOSITORY IN VERCEL. THE VITE PRESET IS DETECTED AUTOMATICALLY.
+2. ADD `VITE_BOT_ID` UNDER **SETTINGS → ENVIRONMENT VARIABLES**, THEN DEPLOY.
+3. EDIT THE DESTINATIONS IN `vercel.json` IF YOUR BACKEND ADDRESS CHANGES.
+4. IN THE [DISCORD DEVELOPER PORTAL](https://discord.com/developers/applications), ADD `https://<your-domain>/callback` AS AN OAUTH2 REDIRECT URI, AND USE THE SAME VALUE IN YOUR BACKEND CONFIG.
 
-## Backend API
+MAKE SURE THE BACKEND REDIRECTS TO A RELATIVE `/` AFTER LOGIN AND DOES NOT SET A COOKIE `Domain` TIED TO ITS OWN ADDRESS. OTHERWISE USERS CAN END UP ON THE BACKEND HOST INSTEAD OF THE VERCEL SITE.
 
-The dashboard expects these endpoints. All except `/api/public` require a logged-in session, and a `401` sends the user to `/login`.
+---
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| GET | `/api/public` | Bot name, avatar and status for the landing page |
-| GET | `/api/me` | Current user, including the `owner` flag |
-| GET | `/api/guilds` | Servers the user can manage |
-| GET | `/api/guilds/:id` | Channels, roles, voice channels and log settings |
-| GET | `/api/overview`, `/api/stats`, `/api/commands` | Overview data, activity stats, command list |
-| GET / DELETE | `/api/events` | Event feed (`limit`, `guild_id`, `type`, `q`) and pruning (`days`) |
-| GET | `/api/events/export` | CSV export |
-| POST | `/api/presence` | Set bot presence (owner) |
-| POST | `/api/guilds/:id/{send,embed,dm,purge,logchannel}` | Messaging and channel actions |
-| GET / POST | `/api/guilds/:id/members` and `/members/:uid/{warn,timeout,nick,kick,ban,unban}` | Member search and moderation |
-| GET / DELETE | `/api/guilds/:id/{warnings,bans}` | Warnings and bans |
-| GET | `/api/guilds/:id/leaderboard` | XP leaderboard |
-| GET / POST | `/api/cogs`, `/api/cogs/:name/{load,unload,reload}` | Cog management |
-| GET / POST | `/api/cogs/:name/settings/:guild`, `/api/cogs/:name/action/:guild` | Per-server cog settings and actions |
+## BACKEND API
 
-## Contributing
+THE DASHBOARD EXPECTS THESE ENDPOINTS. ALL EXCEPT `/api/public` REQUIRE A LOGGED-IN SESSION, AND A `401` SENDS THE USER TO `/login`.
 
-Issues and pull requests are welcome. Run `npm run build` before opening a PR so type errors are caught.
+| METHOD | ENDPOINT | PURPOSE |
+|--------|----------|---------|
+| GET | `/api/public` | BOT NAME, AVATAR AND STATUS FOR THE LANDING PAGE |
+| GET | `/api/me` | CURRENT USER, INCLUDING THE `owner` FLAG |
+| GET | `/api/guilds` | SERVERS THE USER CAN MANAGE |
+| GET | `/api/guilds/:id` | CHANNELS, ROLES, VOICE CHANNELS AND LOG SETTINGS |
+| GET | `/api/overview`, `/api/stats`, `/api/commands` | OVERVIEW DATA, ACTIVITY STATS, COMMAND LIST |
+| GET / DELETE | `/api/events` | EVENT FEED (`limit`, `guild_id`, `type`, `q`) AND PRUNING (`days`) |
+| GET | `/api/events/export` | CSV EXPORT |
+| POST | `/api/presence` | SET BOT PRESENCE (OWNER) |
+| POST | `/api/guilds/:id/{send,embed,dm,purge,logchannel}` | MESSAGING AND CHANNEL ACTIONS |
+| GET / POST | `/api/guilds/:id/members` AND `/members/:uid/{warn,timeout,nick,kick,ban,unban}` | MEMBER SEARCH AND MODERATION |
+| GET / DELETE | `/api/guilds/:id/{warnings,bans}` | WARNINGS AND BANS |
+| GET | `/api/guilds/:id/leaderboard` | XP LEADERBOARD |
+| GET / POST | `/api/cogs`, `/api/cogs/:name/{load,unload,reload}` | COG MANAGEMENT |
+| GET / POST | `/api/cogs/:name/settings/:guild`, `/api/cogs/:name/action/:guild` | PER-SERVER COG SETTINGS AND ACTIONS |
 
-## License
+---
 
-Released under the [MIT License](LICENSE). Copyright (c) 2026 𝗥 𝗘 𝗗 𝟭.
+## CONTRIBUTING
+
+ISSUES AND PULL REQUESTS ARE WELCOME. RUN `npm run build` BEFORE OPENING A PR SO TYPE ERRORS ARE CAUGHT.
+
+1. FORK THE REPOSITORY
+2. CREATE A BRANCH: `git checkout -b feature/YOUR-FEATURE`
+3. COMMIT YOUR CHANGES
+4. PUSH THE BRANCH AND OPEN A PULL REQUEST
+
+---
+
+## LICENSE
+
+RELEASED UNDER THE [MIT LICENSE](LICENSE). COPYRIGHT (C) 2026 R E D 1.
+
+<div align="center">
+
+**[BACK TO TOP](#yukio-dashboard)**
+
+</div>
