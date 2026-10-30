@@ -34,7 +34,6 @@
 ## TABLE OF CONTENTS
 
 - [OVERVIEW](#overview)
-- [PREVIEW](#preview)
 - [FEATURES](#features)
 - [TECH STACK](#tech-stack)
 - [PROJECT STRUCTURE](#project-structure)
@@ -52,53 +51,6 @@ YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH D
 
 ---
 
-## PREVIEW
-
-> PLACE YOUR SCREENSHOTS IN `docs/screenshots/` USING THE FILE NAMES BELOW AND THEY WILL SHOW UP HERE AUTOMATICALLY.
-
-### LANDING PAGE
-
-<p align="center">
-  <img src="docs/screenshots/landing.png" alt="LANDING PAGE PREVIEW" width="800" />
-</p>
-
-### OVERVIEW
-
-<p align="center">
-  <img src="docs/screenshots/overview.png" alt="OVERVIEW PREVIEW" width="800" />
-</p>
-
-### LIVE LOGS
-
-<p align="center">
-  <img src="docs/screenshots/logs.png" alt="LIVE LOGS PREVIEW" width="800" />
-</p>
-
-### SERVER TOOLS AND MODERATION
-
-<p align="center">
-  <img src="docs/screenshots/server.png" alt="SERVER TOOLS PREVIEW" width="800" />
-</p>
-
-### LEADERBOARD
-
-<p align="center">
-  <img src="docs/screenshots/leaderboard.png" alt="LEADERBOARD PREVIEW" width="800" />
-</p>
-
-### SETTINGS AND COGS
-
-<p align="center">
-  <img src="docs/screenshots/settings.png" alt="SETTINGS PREVIEW" width="800" />
-</p>
-
-### MOBILE
-
-<p align="center">
-  <img src="docs/screenshots/mobile.png" alt="MOBILE PREVIEW" width="300" />
-</p>
-
----
 
 ## FEATURES
 
