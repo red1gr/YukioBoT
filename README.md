@@ -1,31 +1,40 @@
-<div align="center">
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/193295439?s=200&v=4" alt="YUKIO LOGO" width="120" height="120" />
+</p>
 
-<img src="https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg" alt="YUKIO LOGO" width="60" height="60" />
+<h1 align="center">YUKIO DASHBOARD</h1>
 
-# YUKIO DASHBOARD
+<p align="center">
+  <b>A WEB DASHBOARD FOR THE YUKIO DISCORD BOT.</b><br />
+  <b>LIVE LOGS. MODERATION. LEVELING. TICKETS. PER-SERVER SETTINGS.</b>
+</p>
 
-**A WEB DASHBOARD FOR THE YUKIO DISCORD BOT.**
-**LIVE LOGS. MODERATION. LEVELING. PER-SERVER SETTINGS.**
+<p align="center">
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/REACT-18-61DAFB?logo=react&logoColor=white" alt="REACT" /></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TYPESCRIPT-5-3178C6?logo=typescript&logoColor=white" alt="TYPESCRIPT" /></a>
+  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/VITE-5-646CFF?logo=vite&logoColor=white" alt="VITE" /></a>
+  <a href="https://vercel.com"><img src="https://img.shields.io/badge/DEPLOY-VERCEL-000?logo=vercel&logoColor=white" alt="VERCEL" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-green.svg" alt="LICENSE: MIT" /></a>
+</p>
 
-<br />
+<p align="center">
+  <a href="https://yukio.red1gr.dev/"><b>LIVE DEMO</b></a> |
+  <a href="https://github.com/red1gr/YukioBoT/issues"><b>REPORT A BUG</b></a> |
+  <a href="https://github.com/red1gr/YukioBoT/issues"><b>REQUEST A FEATURE</b></a>
+</p>
 
-[![REACT](https://img.shields.io/badge/REACT-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
-[![TYPESCRIPT](https://img.shields.io/badge/TYPESCRIPT-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![VITE](https://img.shields.io/badge/VITE-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
-[![VERCEL](https://img.shields.io/badge/DEPLOY-VERCEL-000?logo=vercel&logoColor=white)](https://vercel.com)
-[![LICENSE: MIT](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
-
-<br />
-
-[**LIVE DEMO**](https://yukio.red1gr.dev/) &nbsp;|&nbsp; [**REPORT A BUG**](https://github.com/red1gr/YukioBoT/issues) &nbsp;|&nbsp; [**REQUEST A FEATURE**](https://github.com/red1gr/YukioBoT/issues)
-
-
+<p align="center">
+  <a href="https://yukio.red1gr.dev/">
+    <img src="https://opengraph.githubassets.com/1/red1gr/YukioBoT" alt="YUKIO DASHBOARD PREVIEW" width="800" />
+  </a>
+</p>
 
 ---
 
 ## TABLE OF CONTENTS
 
 - [OVERVIEW](#overview)
+- [PREVIEW](#preview)
 - [FEATURES](#features)
 - [TECH STACK](#tech-stack)
 - [PROJECT STRUCTURE](#project-structure)
@@ -41,7 +50,55 @@
 
 YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH DISCORD, PICK A SERVER AND MANAGE THE BOT DIRECTLY FROM THE BROWSER: LIVE LOGS, MODERATION, LEVELING, COGS AND PER-SERVER SETTINGS.
 
+---
 
+## PREVIEW
+
+> PLACE YOUR SCREENSHOTS IN `docs/screenshots/` USING THE FILE NAMES BELOW AND THEY WILL SHOW UP HERE AUTOMATICALLY.
+
+### LANDING PAGE
+
+<p align="center">
+  <img src="docs/screenshots/landing.png" alt="LANDING PAGE PREVIEW" width="800" />
+</p>
+
+### OVERVIEW
+
+<p align="center">
+  <img src="docs/screenshots/overview.png" alt="OVERVIEW PREVIEW" width="800" />
+</p>
+
+### LIVE LOGS
+
+<p align="center">
+  <img src="docs/screenshots/logs.png" alt="LIVE LOGS PREVIEW" width="800" />
+</p>
+
+### SERVER TOOLS AND MODERATION
+
+<p align="center">
+  <img src="docs/screenshots/server.png" alt="SERVER TOOLS PREVIEW" width="800" />
+</p>
+
+### LEADERBOARD
+
+<p align="center">
+  <img src="docs/screenshots/leaderboard.png" alt="LEADERBOARD PREVIEW" width="800" />
+</p>
+
+### SETTINGS AND COGS
+
+<p align="center">
+  <img src="docs/screenshots/settings.png" alt="SETTINGS PREVIEW" width="800" />
+</p>
+
+### MOBILE
+
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="MOBILE PREVIEW" width="300" />
+</p>
+
+---
 
 ## FEATURES
 
@@ -55,6 +112,9 @@ YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH D
 | **LEADERBOARD** | XP, LEVEL AND MESSAGE COUNTS PER SERVER |
 | **SETTINGS** | LOAD, UNLOAD AND RELOAD COGS, AND EDIT EACH COG'S PER-SERVER SETTINGS AND ACTIONS |
 | **COMMANDS** | BROWSABLE LIST OF THE BOT'S SLASH COMMANDS |
+| **TICKETS** | BROWSE TICKETS AND OPEN A CHAT VIEW FOR EACH CONVERSATION |
+| **SECURITY** | DEDICATED SECURITY TAB FOR SERVER PROTECTION SETTINGS |
+| **BACKUPS** | BACKUP PANEL FOR SERVER DATA |
 | **OWNER CONTROLS** | PRESENCE, DMS AND LOG PRUNING |
 | **INTERFACE** | RESPONSIVE LAYOUT, KEYBOARD SHORTCUTS (`1` TO `6` SWITCH VIEWS) AND REDUCED-MOTION SUPPORT |
 
@@ -76,14 +136,23 @@ YUKIO DASHBOARD IS A WEB INTERFACE FOR THE **YUKIO** DISCORD BOT. SIGN IN WITH D
 ```
 .
 ├── index.html
-├── vercel.json          # PROXIES /api, /login, /callback, /logout TO THE BACKEND
-├── vite.config.ts       # SAME PROXY FOR LOCAL DEV
+├── vercel.json            # PROXIES /api, /login, /callback, /logout TO THE BACKEND
+├── vite.config.ts         # SAME PROXY FOR LOCAL DEV
 └── src/
-    ├── main.tsx         # ENTRY POINT
-    ├── App.tsx          # LANDING, DASHBOARD SHELL, TOASTS
-    ├── views.tsx        # OVERVIEW, LOGS, SERVER, LEADERBOARD, SETTINGS, COMMANDS
-    ├── api.ts           # FETCH HELPER AND TOAST BUS
-    └── styles.css
+    ├── main.tsx           # ENTRY POINT
+    ├── App.tsx            # LANDING, DASHBOARD SHELL, TOASTS
+    ├── views.tsx          # OVERVIEW, LOGS, SERVER, LEADERBOARD, SETTINGS, COMMANDS
+    ├── GuildPicker.tsx    # SERVER SELECTION
+    ├── TicketsTab.tsx     # TICKETS LIST
+    ├── TicketChat.tsx     # TICKET CONVERSATIONS
+    ├── SecurityTab.tsx    # SECURITY CONTROLS
+    ├── BackupPanel.tsx    # BACKUPS
+    ├── Designer.tsx       # DESIGNER TOOL
+    ├── OwnerCard.tsx      # OWNER USER CARD
+    ├── Legal.tsx          # LEGAL PAGES
+    ├── api.ts             # FETCH HELPER AND TOAST BUS
+    └── *.css              # styles, landing, guildpicker, legal, logchannels,
+                           # security, ticketchat, usercard
 ```
 
 ---
@@ -168,8 +237,4 @@ ISSUES AND PULL REQUESTS ARE WELCOME. RUN `npm run build` BEFORE OPENING A PR SO
 
 RELEASED UNDER THE [MIT LICENSE](LICENSE). COPYRIGHT (C) 2026 R E D 1.
 
-<div align="center">
-
-**[BACK TO TOP](#yukio-dashboard)**
-
-</div>
+<p align="center"><b><a href="#yukio-dashboard">BACK TO TOP</a></b></p>
