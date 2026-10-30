@@ -26,7 +26,6 @@
 ## TABLE OF CONTENTS
 
 - [OVERVIEW](#overview)
-- [PREVIEW](#preview)
 - [FEATURES](#features)
 - [TECH STACK](#tech-stack)
 - [PROJECT STRUCTURE](#project-structure)
