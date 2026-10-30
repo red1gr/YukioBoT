@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://avatars.githubusercontent.com/u/193295439?s=200&v=4" alt="YUKIO LOGO" width="120" height="120" />
+  <img src="https://r2.fivemanage.com/S1wPEooftNoEmQjn8jhwx/5b55ae114cd60f4af538b42a45814f09.jpg" alt="YUKIO LOGO" width="120" height="120" />
 </p>
 
 <h1 align="center">YUKIO DASHBOARD</h1>
