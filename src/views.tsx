@@ -293,9 +293,9 @@ export function Settings({ G, owner }: P) {
 }
 
 /* ---------- Commands ---------- */
-type Cmd = { name: string; description: string; cog: string; sub: boolean; enabled: boolean; explicit: boolean }
+type Cmd = { name: string; description: string; cog: string; sub: boolean; enabled: boolean; explicit: boolean; locked: boolean }
 
-export function Commands({ G }: P) {
+export function Commands({ G, owner }: P) {
   const [c, , setC] = useLoad(() => (G ? api<Cmd[]>(`/guilds/${G}/commands`) : Promise.resolve([] as Cmd[])), [G])
   const [busy, setBusy] = useState(false)
   if (!G) return <Empty>No server selected.</Empty>
@@ -321,12 +321,15 @@ export function Commands({ G }: P) {
       const list = byCog[name].slice().sort((a, b) => a.name.localeCompare(b.name))
       const on = list.filter(x => x.enabled).length
       const all = on === list.length
+      // Locked commands (like /help) can only be disabled by the bot owner, so bulk actions skip them for everyone else.
+      const bulk = list.filter(x => owner || !x.locked).map(x => x.name)
+      const canOff = list.some(x => x.enabled && (owner || !x.locked))
       return (
         <div className="card" key={name} style={{ marginBottom: 14 }}>
           <div className="row" style={{ border: 0, padding: 0 }}>
             <span className="n"><b style={{ textTransform: 'uppercase' }}>{name.replace(/_/g, ' ')}</b> <span className="dim">{on}/{list.length} enabled</span></span>
             <button disabled={busy || all} onClick={() => toggle(list.map(x => x.name), true)}>Enable all</button>
-            <button className="d" disabled={busy || on === 0} onClick={() => toggle(list.map(x => x.name), false)}>Disable all</button>
+            <button className="d" disabled={busy || !canOff} onClick={() => toggle(bulk, false)}>Disable all</button>
           </div>
           {list.map(x => {
             const parentOff = x.sub && !(list.find(p => p.name === x.name.split(' ')[0])?.enabled ?? true)
@@ -334,8 +337,9 @@ export function Commands({ G }: P) {
               <div className="row" key={x.name} style={x.sub ? { paddingLeft: 24 } : undefined}>
                 <code className="n" style={x.enabled ? undefined : { opacity: 0.5 }}>/{x.name}</code>
                 <span className="dim" style={{ flex: 3 }}>{x.description}</span>
-                <input type="checkbox" checked={x.enabled} disabled={busy || parentOff}
-                  title={parentOff ? 'Disabled because its parent command is off' : x.enabled ? 'Click to disable' : 'Click to enable'}
+                {x.locked && !owner && <span className="dim" style={{ fontSize: 12 }}>You don't have access to disable this command</span>}
+                <input type="checkbox" checked={x.enabled} disabled={busy || parentOff || (x.locked && !owner)}
+                  title={x.locked && !owner ? "You don't have access to disable this command" : parentOff ? 'Disabled because its parent command is off' : x.enabled ? 'Click to disable' : 'Click to enable'}
                   onChange={e => toggle([x.name], e.target.checked)} />
               </div>
             )
