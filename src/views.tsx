@@ -293,9 +293,55 @@ export function Settings({ G, owner }: P) {
 }
 
 /* ---------- Commands ---------- */
-export function Commands(_: P) {
-  const [c] = useLoad(() => api<any[]>('/commands'), [])
+type Cmd = { name: string; description: string; cog: string; sub: boolean; enabled: boolean; explicit: boolean }
+
+export function Commands({ G }: P) {
+  const [c, , setC] = useLoad(() => (G ? api<Cmd[]>(`/guilds/${G}/commands`) : Promise.resolve([] as Cmd[])), [G])
+  const [busy, setBusy] = useState(false)
+  if (!G) return <Empty>No server selected.</Empty>
   if (!c) return <Skeleton />
   if (!c.length) return <Empty>No commands.</Empty>
-  return <>{c.map(x => <div className="row" key={x.name}><code className="n">/{x.name}</code><span className="dim" style={{ flex: 3 }}>{x.description}</span></div>)}</>
+
+  const toggle = async (names: string[], enabled: boolean) => {
+    setBusy(true)
+    try {
+      const r = await api<{ commands: Cmd[] }>(`/guilds/${G}/commands/toggle`, { names, enabled })
+      setC(r.commands)
+      toast(enabled ? 'Enabled' : 'Disabled')
+    } finally { setBusy(false) }
+  }
+
+  const byCog: Record<string, Cmd[]> = {}
+  c.forEach(x => { if (!byCog[x.cog]) byCog[x.cog] = []; byCog[x.cog].push(x) })
+  const cogs = Object.keys(byCog).sort((a, b) => a.localeCompare(b))
+
+  return <>
+    <p className="dim lc-lead">Turn commands on or off for this server. Disabled commands stay visible in Discord, but reply that they are disabled. Turning off a parent command (like /ticket) also turns off its subcommands.</p>
+    {cogs.map(name => {
+      const list = byCog[name].slice().sort((a, b) => a.name.localeCompare(b.name))
+      const on = list.filter(x => x.enabled).length
+      const all = on === list.length
+      return (
+        <div className="card" key={name} style={{ marginBottom: 14 }}>
+          <div className="row" style={{ border: 0, padding: 0 }}>
+            <span className="n"><b style={{ textTransform: 'uppercase' }}>{name.replace(/_/g, ' ')}</b> <span className="dim">{on}/{list.length} enabled</span></span>
+            <button disabled={busy || all} onClick={() => toggle(list.map(x => x.name), true)}>Enable all</button>
+            <button className="d" disabled={busy || on === 0} onClick={() => toggle(list.map(x => x.name), false)}>Disable all</button>
+          </div>
+          {list.map(x => {
+            const parentOff = x.sub && !(list.find(p => p.name === x.name.split(' ')[0])?.enabled ?? true)
+            return (
+              <div className="row" key={x.name} style={x.sub ? { paddingLeft: 24 } : undefined}>
+                <code className="n" style={x.enabled ? undefined : { opacity: 0.5 }}>/{x.name}</code>
+                <span className="dim" style={{ flex: 3 }}>{x.description}</span>
+                <input type="checkbox" checked={x.enabled} disabled={busy || parentOff}
+                  title={parentOff ? 'Disabled because its parent command is off' : x.enabled ? 'Click to disable' : 'Click to enable'}
+                  onChange={e => toggle([x.name], e.target.checked)} />
+              </div>
+            )
+          })}
+        </div>
+      )
+    })}
+  </>
 }
